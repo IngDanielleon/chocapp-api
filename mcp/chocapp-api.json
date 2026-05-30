@@ -1,0 +1,389 @@
+{
+  "schema_version": "1.0",
+  "name": "chocapp-api",
+  "description": "ChocApp accident documentation API for Colombian motorcycle and car drivers",
+  "base_url": "https://chocapp.reddantechnology.com/api/v1",
+  "authentication": {
+    "type": "bearer",
+    "header": "Authorization",
+    "format": "Bearer {token}",
+    "obtain_via": "POST /auth/login",
+    "token_ttl_days": 90
+  },
+  "tools": [
+    {
+      "name": "register_user",
+      "description": "Register a new ChocApp user",
+      "method": "POST",
+      "path": "/auth/register",
+      "content_type": "multipart/form-data",
+      "auth_required": false,
+      "parameters": {
+        "required": ["name","email","password","password_confirmation","id_type","id_number","phone_number","terms_accepted"],
+        "optional": ["profile_pic"],
+        "schema": {
+          "name":                  { "type": "string", "maxLength": 100 },
+          "email":                 { "type": "string", "format": "email" },
+          "password":              { "type": "string", "minLength": 8 },
+          "password_confirmation": { "type": "string" },
+          "id_type":               { "type": "string", "enum": ["CC","CE","PPT","PASAPORTE"] },
+          "id_number":             { "type": "string" },
+          "phone_number":          { "type": "string" },
+          "terms_accepted":        { "type": "boolean" },
+          "profile_pic":           { "type": "file", "mimes": "jpeg,png,webp", "maxKB": 5120 }
+        }
+      },
+      "returns": { "user": "UserResource", "token": "string" }
+    },
+    {
+      "name": "login",
+      "description": "Authenticate and obtain a Bearer token. Rate limited: 5/min per IP.",
+      "method": "POST",
+      "path": "/auth/login",
+      "content_type": "application/json",
+      "auth_required": false,
+      "parameters": {
+        "required": ["email","password"],
+        "schema": {
+          "email":    { "type": "string", "format": "email" },
+          "password": { "type": "string" }
+        }
+      },
+      "returns": { "user": "UserResource", "token": "string" }
+    },
+    {
+      "name": "get_me",
+      "description": "Get the authenticated user profile with their vehicles",
+      "method": "GET",
+      "path": "/auth/me",
+      "auth_required": true,
+      "returns": { "user": "UserResource" }
+    },
+    {
+      "name": "logout",
+      "description": "Revoke current Bearer token",
+      "method": "POST",
+      "path": "/auth/logout",
+      "auth_required": true
+    },
+    {
+      "name": "list_vehicles",
+      "description": "List all vehicles registered for the authenticated user",
+      "method": "GET",
+      "path": "/vehicles",
+      "auth_required": true,
+      "returns": { "vehicles": "VehicleResource[]" }
+    },
+    {
+      "name": "create_vehicle",
+      "description": "Register a new vehicle for the authenticated user",
+      "method": "POST",
+      "path": "/vehicles",
+      "content_type": "multipart/form-data",
+      "auth_required": true,
+      "parameters": {
+        "required": ["plate","brand","model","year","color","type"],
+        "optional": ["photo"],
+        "schema": {
+          "plate": { "type": "string", "maxLength": 10 },
+          "brand": { "type": "string" },
+          "model": { "type": "string" },
+          "year":  { "type": "integer" },
+          "color": { "type": "string" },
+          "type":  { "type": "string", "enum": ["MOTOCICLETA","AUTOMOVIL"] },
+          "photo": { "type": "file", "mimes": "jpeg,png,webp", "maxKB": 5120 }
+        }
+      },
+      "returns": { "vehicle": "VehicleResource" }
+    },
+    {
+      "name": "get_vehicle_documents",
+      "description": "Get SOAT, Tecnomecánica and Licencia status for a vehicle. status: VIGENTE | VENCE_PRONTO | VENCIDO",
+      "method": "GET",
+      "path": "/vehicles/{vehicle_id}/documents",
+      "auth_required": true,
+      "path_params": {
+        "vehicle_id": { "type": "string", "format": "uuid" }
+      },
+      "returns": { "documents": "DocumentResource[]" }
+    },
+    {
+      "name": "upsert_vehicle_document",
+      "description": "Create or update a vehicle document (SOAT, Tecnomecánica or Licencia)",
+      "method": "POST",
+      "path": "/vehicles/{vehicle_id}/documents",
+      "content_type": "multipart/form-data",
+      "auth_required": true,
+      "path_params": {
+        "vehicle_id": { "type": "string", "format": "uuid" }
+      },
+      "parameters": {
+        "required": ["type","document_number","expiry_date"],
+        "schema": {
+          "type":            { "type": "string", "enum": ["SOAT","TECNOMECANICA","LICENCIA"] },
+          "document_number": { "type": "string" },
+          "issue_date":      { "type": "string", "format": "date" },
+          "expiry_date":     { "type": "string", "format": "date" },
+          "notes":           { "type": "string" },
+          "pdf_file":        { "type": "file", "mimes": "pdf", "maxKB": 20480 }
+        }
+      },
+      "returns": { "document": "DocumentResource" }
+    },
+    {
+      "name": "get_vehicle_maintenance",
+      "description": "Get maintenance history for a vehicle",
+      "method": "GET",
+      "path": "/vehicles/{vehicle_id}/maintenance",
+      "auth_required": true,
+      "path_params": {
+        "vehicle_id": { "type": "string", "format": "uuid" }
+      },
+      "returns": { "records": "MaintenanceResource[]" }
+    },
+    {
+      "name": "create_maintenance_record",
+      "description": "Register a maintenance event for a vehicle",
+      "method": "POST",
+      "path": "/vehicles/{vehicle_id}/maintenance",
+      "content_type": "application/json",
+      "auth_required": true,
+      "path_params": {
+        "vehicle_id": { "type": "string", "format": "uuid" }
+      },
+      "parameters": {
+        "required": ["maintenance_date","type"],
+        "schema": {
+          "maintenance_date": { "type": "string", "format": "date" },
+          "type":             { "type": "string", "enum": ["ACEITE","FRENOS","LLANTAS","BATERIA","FILTROS","SUSPENSION","REVISION_GENERAL","OTRO"] },
+          "cost":             { "type": "number" },
+          "workshop_name":    { "type": "string" },
+          "current_mileage":  { "type": "integer" },
+          "notes":            { "type": "string" },
+          "next_date":        { "type": "string", "format": "date" },
+          "next_mileage":     { "type": "integer" }
+        }
+      },
+      "returns": { "record": "MaintenanceResource" }
+    },
+    {
+      "name": "list_incidents",
+      "description": "List all accidents for the authenticated user, paginated. Filters: status, from, to.",
+      "method": "GET",
+      "path": "/incidents",
+      "auth_required": true,
+      "query_params": {
+        "status":   { "type": "string", "enum": ["BORRADOR","REPORTADO","EN_REVISION","FINALIZADO"] },
+        "from":     { "type": "string", "format": "date" },
+        "to":       { "type": "string", "format": "date" },
+        "per_page": { "type": "integer", "default": 15 },
+        "page":     { "type": "integer", "default": 1 }
+      },
+      "returns": { "incidents": "IncidentResource[]", "meta": "PaginationMeta" }
+    },
+    {
+      "name": "create_incident",
+      "description": "Register a new vehicle accident with photo evidence. Minimum 4 angle photos required. Rate limited: 10/min.",
+      "method": "POST",
+      "path": "/incidents",
+      "content_type": "multipart/form-data",
+      "auth_required": true,
+      "parameters": {
+        "required": ["vehicle_id","description","incident_date","incident_time","latitude","longitude","weather_condition","road_condition","photos"],
+        "optional": ["title","location_address","police_report_number"],
+        "schema": {
+          "vehicle_id":           { "type": "string", "format": "uuid" },
+          "title":                { "type": "string", "maxLength": 200 },
+          "description":          { "type": "string", "minLength": 10, "maxLength": 2000 },
+          "incident_date":        { "type": "string", "format": "date" },
+          "incident_time":        { "type": "string", "example": "14:30" },
+          "location_address":     { "type": "string", "maxLength": 500 },
+          "latitude":             { "type": "number", "minimum": -90, "maximum": 90 },
+          "longitude":            { "type": "number", "minimum": -180, "maximum": 180 },
+          "weather_condition":    { "type": "string", "enum": ["SOLEADO","LLUVIOSO","NUBLADO","NOCHE"] },
+          "road_condition":       { "type": "string", "enum": ["BUEN_ESTADO","HUMEDO","HUECOS","DERRUMBE"] },
+          "police_report_number": { "type": "string" },
+          "photos": {
+            "type": "array",
+            "minItems": 4,
+            "items": {
+              "file":  { "type": "file", "mimes": "jpeg,png,webp", "maxKB": 10240 },
+              "angle": { "type": "string", "enum": ["FRONT","FRONT_RIGHT","RIGHT","REAR_RIGHT","REAR","REAR_LEFT","LEFT","FRONT_LEFT","INTERIOR","ODOMETER","EXTRA"] }
+            }
+          }
+        }
+      },
+      "returns": { "incident": "IncidentDetailResource" }
+    },
+    {
+      "name": "get_incident",
+      "description": "Get full detail of an incident including photos and third parties",
+      "method": "GET",
+      "path": "/incidents/{incident_id}",
+      "auth_required": true,
+      "path_params": { "incident_id": { "type": "string", "format": "uuid" } },
+      "returns": { "incident": "IncidentDetailResource" }
+    },
+    {
+      "name": "export_incident_pdf",
+      "description": "Generate and download the official incident PDF report. Rate limited: 10/min.",
+      "method": "GET",
+      "path": "/incidents/{incident_id}/export-pdf",
+      "auth_required": true,
+      "path_params": { "incident_id": { "type": "string", "format": "uuid" } },
+      "returns": { "content_type": "application/pdf", "disposition": "attachment" }
+    },
+    {
+      "name": "add_third_party",
+      "description": "Add a third party (vehicle, pedestrian or cyclist) involved in an incident",
+      "method": "POST",
+      "path": "/incidents/{incident_id}/third-parties",
+      "auth_required": true,
+      "path_params": { "incident_id": { "type": "string", "format": "uuid" } },
+      "parameters": {
+        "required": ["party_type"],
+        "schema": {
+          "party_type":       { "type": "string", "enum": ["VEHICULO","PEATON","CICLISTA"] },
+          "plate":            { "type": "string" },
+          "driver_name":      { "type": "string" },
+          "driver_id":        { "type": "string" },
+          "driver_phone":     { "type": "string" },
+          "insurance_company":{ "type": "string" },
+          "insurance_policy": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "get_notifications",
+      "description": "Get notifications for the authenticated user",
+      "method": "GET",
+      "path": "/notifications",
+      "auth_required": true,
+      "query_params": {
+        "unread_only": { "type": "boolean", "default": false },
+        "per_page":    { "type": "integer", "default": 20 }
+      },
+      "returns": { "notifications": "NotificationResource[]" }
+    },
+    {
+      "name": "mark_notification_read",
+      "description": "Mark a single notification as read",
+      "method": "PATCH",
+      "path": "/notifications/{id}/read",
+      "auth_required": true,
+      "path_params": { "id": { "type": "string", "format": "uuid" } }
+    },
+    {
+      "name": "mark_all_notifications_read",
+      "description": "Mark all unread notifications as read",
+      "method": "PATCH",
+      "path": "/notifications/read-all",
+      "auth_required": true
+    },
+    {
+      "name": "get_emergency_contacts",
+      "description": "Get list of Colombian emergency numbers: 123, police, tow trucks, lawyers, insurance",
+      "method": "GET",
+      "path": "/support/emergency-contacts",
+      "auth_required": true
+    },
+    {
+      "name": "get_workshops",
+      "description": "Get list of geolocated workshops near a coordinate",
+      "method": "GET",
+      "path": "/support/workshops",
+      "auth_required": true,
+      "query_params": {
+        "latitude":  { "type": "number" },
+        "longitude": { "type": "number" },
+        "radius_km": { "type": "integer", "default": 10 }
+      }
+    }
+  ],
+  "schemas": {
+    "UserResource": {
+      "id":              "string (uuid)",
+      "name":            "string",
+      "email":           "string",
+      "id_type":         "CC|CE|PPT|PASAPORTE",
+      "id_number":       "string",
+      "phone_number":    "string",
+      "profile_pic_url": "string|null",
+      "terms_accepted":  "boolean",
+      "vehicles_count":  "integer"
+    },
+    "VehicleResource": {
+      "id":        "string (uuid)",
+      "plate":     "string",
+      "brand":     "string",
+      "model":     "string",
+      "year":      "integer",
+      "color":     "string",
+      "type":      "MOTOCICLETA|AUTOMOVIL",
+      "photo_url": "string|null"
+    },
+    "DocumentResource": {
+      "id":              "string (uuid)",
+      "type":            "SOAT|TECNOMECANICA|LICENCIA",
+      "document_number": "string",
+      "expiry_date":     "string (Y-m-d)",
+      "status":          "VIGENTE|VENCE_PRONTO|VENCIDO",
+      "days_remaining":  "integer",
+      "has_pdf":         "boolean"
+    },
+    "IncidentResource": {
+      "id":               "string (uuid)",
+      "title":            "string",
+      "status":           "BORRADOR|REPORTADO|EN_REVISION|FINALIZADO",
+      "status_label":     "string",
+      "incident_date":    "string (Y-m-d)",
+      "location_address": "string",
+      "cover_photo_url":  "string|null",
+      "photos_count":     "integer",
+      "has_pdf":          "boolean"
+    },
+    "MaintenanceResource": {
+      "id":               "string (uuid)",
+      "maintenance_date": "string (Y-m-d)",
+      "type":             "string",
+      "cost":             "number|null",
+      "workshop_name":    "string|null",
+      "current_mileage":  "integer|null",
+      "next_date":        "string|null",
+      "next_mileage":     "integer|null"
+    },
+    "PaginationMeta": {
+      "current_page": "integer",
+      "last_page":    "integer",
+      "per_page":     "integer",
+      "total":        "integer"
+    }
+  },
+  "error_codes": {
+    "401": "Unauthenticated — include valid Bearer token",
+    "403": "Forbidden — you do not own this resource",
+    "404": "Resource not found",
+    "422": "Validation failed — check errors field for details",
+    "429": "Too many requests — wait before retrying",
+    "501": "Feature not implemented in this environment"
+  },
+  "rate_limits": {
+    "general": "60 requests/minute per authenticated user",
+    "auth":    "5 requests/minute per IP (login, register)",
+    "heavy":   "10 requests/minute (PDF export, photo upload)"
+  },
+  "standard_response_format": {
+    "success": {
+      "success": true,
+      "message": "string",
+      "data":    "object|array|null",
+      "meta":    "PaginationMeta | null"
+    },
+    "error": {
+      "success": false,
+      "message": "string",
+      "errors":  "object|null",
+      "code":    "integer"
+    }
+  }
+}
