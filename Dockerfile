@@ -12,8 +12,11 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
  && docker-php-ext-install \
     pdo_mysql mbstring zip exif gd intl pcntl bcmath opcache
 
-# Redis extension
-RUN pecl install redis && docker-php-ext-enable redis
+# Redis extension (build deps temporales para pecl)
+RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
+ && pecl install redis \
+ && docker-php-ext-enable redis \
+ && apk del --no-network .build-deps
 
 # Composer
 COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
