@@ -67,7 +67,7 @@ pipeline {
         stage('ENV - staging') {
             when { branch 'staging' }
             steps {
-                sh 'cp .stg .env'
+                sh 'cp .env.example .env'
                 script {
                     def props = [
                         'APP_KEY'              : env.STG_APP_KEY,
@@ -104,7 +104,7 @@ pipeline {
         stage('ENV - production') {
             when { branch 'master' }
             steps {
-                sh 'cp .prod .env'
+                sh 'cp .env.example .env'
                 script {
                     def props = [
                         'APP_KEY'              : env.PROD_APP_KEY,
@@ -347,8 +347,10 @@ pipeline {
 
     post {
         always {
-            script {
-                try { deleteDir() } catch (Exception e) { echo "Cleanup warning: ${e.message}" }
+            node('any') {
+                script {
+                    try { deleteDir() } catch (Exception e) { echo "Cleanup warning: ${e.message}" }
+                }
             }
         }
         success {
