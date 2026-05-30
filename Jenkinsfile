@@ -266,7 +266,6 @@ pipeline {
 }"""
                     writeFile(file: 'stg_chocapp_vhost.conf', text: cfg)
                 }
-                sh "scp stg_chocapp_vhost.conf ${env.SSH_TARGET}:/tmp/stg_chocapp_vhost.conf"
                 sshPublisher(
                     publishers: [
                         sshPublisherDesc(
@@ -277,7 +276,7 @@ pipeline {
                                     excludes: '',
                                     execCommand: """
                                         if [ ! -f ${env.NGINX_SITES_AVAILABLE}/${env.STG_VHOST_CONF} ]; then
-                                            cp /tmp/stg_chocapp_vhost.conf ${env.NGINX_SITES_AVAILABLE}/${env.STG_VHOST_CONF}
+                                            cp ${env.WORKSPACE}/stg_chocapp_vhost.conf ${env.NGINX_SITES_AVAILABLE}/${env.STG_VHOST_CONF}
                                             ln -sf ${env.NGINX_SITES_AVAILABLE}/${env.STG_VHOST_CONF} ${env.NGINX_SITES_ENABLED}/${env.STG_VHOST_CONF}
                                             nginx -t && systemctl reload nginx
                                             echo "Virtualhost ${env.STG_DOMAIN} creado."
@@ -329,7 +328,6 @@ pipeline {
 }"""
                     writeFile(file: 'prod_chocapp_vhost.conf', text: cfg)
                 }
-                sh "scp prod_chocapp_vhost.conf ${env.SSH_TARGET}:/tmp/prod_chocapp_vhost.conf"
                 sshPublisher(
                     publishers: [
                         sshPublisherDesc(
@@ -340,7 +338,7 @@ pipeline {
                                     excludes: '',
                                     execCommand: """
                                         if [ ! -f ${env.NGINX_SITES_AVAILABLE}/${env.PROD_VHOST_CONF} ]; then
-                                            cp /tmp/prod_chocapp_vhost.conf ${env.NGINX_SITES_AVAILABLE}/${env.PROD_VHOST_CONF}
+                                            cp ${env.WORKSPACE}/prod_chocapp_vhost.conf ${env.NGINX_SITES_AVAILABLE}/${env.PROD_VHOST_CONF}
                                             ln -sf ${env.NGINX_SITES_AVAILABLE}/${env.PROD_VHOST_CONF} ${env.NGINX_SITES_ENABLED}/${env.PROD_VHOST_CONF}
                                             nginx -t && systemctl reload nginx
                                             echo "Virtualhost ${env.PROD_DOMAIN} creado."
@@ -391,7 +389,6 @@ pipeline {
                                             cd ${env.STG_DIR_DESTINY} && docker compose --project-name ${env.STG_CONTAINER_PREFIX} down --remove-orphans || true
                                         fi
                                         docker rm -f ${env.STG_CONTAINER_PREFIX}_app ${env.STG_CONTAINER_PREFIX}_nginx ${env.STG_CONTAINER_PREFIX}_db ${env.STG_CONTAINER_PREFIX}_redis ${env.STG_CONTAINER_PREFIX}_queue ${env.STG_CONTAINER_PREFIX}_scheduler 2>/dev/null || true
-                                        rm -rf ${env.STG_DIR_DESTINY}/* ${env.STG_DIR_DESTINY}/.env 2>/dev/null || true
                                     """,
                                     execTimeout: 180000,
                                     flatten: false,
@@ -411,9 +408,39 @@ pipeline {
                     ]
                 )
 
-                // Copia el workspace al destino (los archivos visibles + .env)
-                sh "scp -r * ${env.SSH_TARGET}:${env.STG_DIR_DESTINY}/"
-                sh "scp .env ${env.SSH_TARGET}:${env.STG_DIR_DESTINY}/.env"
+                // Copia el workspace al destino vía rsync ejecutado como root
+                sshPublisher(
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: 'root-local',
+                            transfers: [
+                                sshTransfer(
+                                    cleanRemote: false,
+                                    excludes: '',
+                                    execCommand: """
+                                        rsync -a --delete \\
+                                            --exclude='.git' \\
+                                            --exclude='vendor' \\
+                                            --exclude='node_modules' \\
+                                            ${env.WORKSPACE}/ ${env.STG_DIR_DESTINY}/
+                                    """,
+                                    execTimeout: 300000,
+                                    flatten: false,
+                                    makeEmptyDirs: false,
+                                    noDefaultExcludes: false,
+                                    patternSeparator: '[, ]+',
+                                    remoteDirectory: '',
+                                    remoteDirectorySDF: false,
+                                    removePrefix: '',
+                                    sourceFiles: ''
+                                )
+                            ],
+                            usePromotionTimestamp: false,
+                            useWorkspaceInPromotion: false,
+                            verbose: true
+                        )
+                    ]
+                )
 
                 // Levanta contenedores y prepara Laravel
                 sshPublisher(
@@ -577,7 +604,6 @@ pipeline {
                                             cd ${env.PROD_DIR_DESTINY} && docker compose --project-name ${env.PROD_CONTAINER_PREFIX} down --remove-orphans || true
                                         fi
                                         docker rm -f ${env.PROD_CONTAINER_PREFIX}_app ${env.PROD_CONTAINER_PREFIX}_nginx ${env.PROD_CONTAINER_PREFIX}_db ${env.PROD_CONTAINER_PREFIX}_redis ${env.PROD_CONTAINER_PREFIX}_queue ${env.PROD_CONTAINER_PREFIX}_scheduler 2>/dev/null || true
-                                        rm -rf ${env.PROD_DIR_DESTINY}/* ${env.PROD_DIR_DESTINY}/.env 2>/dev/null || true
                                     """,
                                     execTimeout: 180000,
                                     flatten: false,
@@ -597,8 +623,38 @@ pipeline {
                     ]
                 )
 
-                sh "scp -r * ${env.SSH_TARGET}:${env.PROD_DIR_DESTINY}/"
-                sh "scp .env ${env.SSH_TARGET}:${env.PROD_DIR_DESTINY}/.env"
+                sshPublisher(
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: 'root-local',
+                            transfers: [
+                                sshTransfer(
+                                    cleanRemote: false,
+                                    excludes: '',
+                                    execCommand: """
+                                        rsync -a --delete \\
+                                            --exclude='.git' \\
+                                            --exclude='vendor' \\
+                                            --exclude='node_modules' \\
+                                            ${env.WORKSPACE}/ ${env.PROD_DIR_DESTINY}/
+                                    """,
+                                    execTimeout: 300000,
+                                    flatten: false,
+                                    makeEmptyDirs: false,
+                                    noDefaultExcludes: false,
+                                    patternSeparator: '[, ]+',
+                                    remoteDirectory: '',
+                                    remoteDirectorySDF: false,
+                                    removePrefix: '',
+                                    sourceFiles: ''
+                                )
+                            ],
+                            usePromotionTimestamp: false,
+                            useWorkspaceInPromotion: false,
+                            verbose: true
+                        )
+                    ]
+                )
 
                 sshPublisher(
                     publishers: [
@@ -728,10 +784,8 @@ pipeline {
 
     post {
         always {
-            node('any') {
-                script {
-                    try { deleteDir() } catch (Exception e) { echo "Cleanup warning: ${e.message}" }
-                }
+            script {
+                try { deleteDir() } catch (Exception e) { echo "Cleanup warning: ${e.message}" }
             }
         }
         success {
