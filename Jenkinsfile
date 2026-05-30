@@ -460,7 +460,7 @@ pipeline {
                                             ${env.STG_DIR_DESTINY}/storage/framework/views \\
                                             ${env.STG_DIR_DESTINY}/bootstrap/cache
                                         cd ${env.STG_DIR_DESTINY} && docker compose --project-name ${env.STG_CONTAINER_PREFIX} up --build -d
-                                        timeout 120 sh -c 'until docker exec ${env.STG_CONTAINER_APP} php -v > /dev/null 2>&1; do sleep 3; done'
+                                        timeout 120 sh -c 'until docker exec -u root ${env.STG_CONTAINER_APP} php -v > /dev/null 2>&1; do sleep 3; done'
                                     """,
                                     execTimeout: 600000,
                                     flatten: false,
@@ -475,7 +475,7 @@ pipeline {
                                 sshTransfer(
                                     cleanRemote: false,
                                     excludes: '',
-                                    execCommand: "docker exec ${env.STG_CONTAINER_APP} chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache",
+                                    execCommand: "docker exec -u root ${env.STG_CONTAINER_APP} chown -R www:www /var/www/html/storage /var/www/html/bootstrap/cache",
                                     execTimeout: 120000,
                                     flatten: false,
                                     makeEmptyDirs: false,
@@ -489,7 +489,7 @@ pipeline {
                                 sshTransfer(
                                     cleanRemote: false,
                                     excludes: '',
-                                    execCommand: "docker exec ${env.STG_CONTAINER_APP} sh -c 'rm -f /var/www/html/bootstrap/cache/*.php'",
+                                    execCommand: "docker exec -u root ${env.STG_CONTAINER_APP} sh -c 'rm -f /var/www/html/bootstrap/cache/*.php'",
                                     execTimeout: 60000,
                                     flatten: false,
                                     makeEmptyDirs: false,
@@ -503,7 +503,7 @@ pipeline {
                                 sshTransfer(
                                     cleanRemote: false,
                                     excludes: '',
-                                    execCommand: "docker exec ${env.STG_CONTAINER_APP} composer install --working-dir=/var/www/html --no-interaction --prefer-dist --optimize-autoloader",
+                                    execCommand: "docker exec -u root ${env.STG_CONTAINER_APP} composer install --working-dir=/var/www/html --no-interaction --prefer-dist --optimize-autoloader",
                                     execTimeout: 600000,
                                     flatten: false,
                                     makeEmptyDirs: false,
@@ -517,7 +517,7 @@ pipeline {
                                 sshTransfer(
                                     cleanRemote: false,
                                     excludes: '',
-                                    execCommand: "docker exec ${env.STG_CONTAINER_APP} sh -c 'cd /var/www/html && php artisan migrate:fresh --seed --force'",
+                                    execCommand: "docker exec -u root ${env.STG_CONTAINER_APP} sh -c 'cd /var/www/html && php artisan migrate:fresh --seed --force'",
                                     execTimeout: 300000,
                                     flatten: false,
                                     makeEmptyDirs: false,
@@ -531,7 +531,7 @@ pipeline {
                                 sshTransfer(
                                     cleanRemote: false,
                                     excludes: '',
-                                    execCommand: "docker exec ${env.STG_CONTAINER_APP} sh -c 'cd /var/www/html && php artisan optimize:clear && php artisan optimize'",
+                                    execCommand: "docker exec -u root ${env.STG_CONTAINER_APP} sh -c 'cd /var/www/html && php artisan optimize:clear && php artisan optimize'",
                                     execTimeout: 120000,
                                     flatten: false,
                                     makeEmptyDirs: false,
@@ -545,7 +545,7 @@ pipeline {
                                 sshTransfer(
                                     cleanRemote: false,
                                     excludes: '',
-                                    execCommand: "docker exec ${env.STG_CONTAINER_APP} sh -c 'cd /var/www/html && php artisan l5-swagger:generate'",
+                                    execCommand: "docker exec -u root ${env.STG_CONTAINER_APP} sh -c 'cd /var/www/html && php artisan l5-swagger:generate'",
                                     execTimeout: 120000,
                                     flatten: false,
                                     makeEmptyDirs: false,
@@ -559,7 +559,7 @@ pipeline {
                                 sshTransfer(
                                     cleanRemote: false,
                                     excludes: '',
-                                    execCommand: "docker exec ${env.STG_CONTAINER_APP} chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null || true",
+                                    execCommand: "docker exec -u root ${env.STG_CONTAINER_APP} chown -R www:www /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null || true",
                                     execTimeout: 60000,
                                     flatten: false,
                                     makeEmptyDirs: false,
@@ -673,7 +673,7 @@ pipeline {
                                             ${env.PROD_DIR_DESTINY}/storage/framework/views \\
                                             ${env.PROD_DIR_DESTINY}/bootstrap/cache
                                         cd ${env.PROD_DIR_DESTINY} && docker compose --project-name ${env.PROD_CONTAINER_PREFIX} up --build -d
-                                        timeout 120 sh -c 'until docker exec ${env.PROD_CONTAINER_APP} php -v > /dev/null 2>&1; do sleep 3; done'
+                                        timeout 120 sh -c 'until docker exec -u root ${env.PROD_CONTAINER_APP} php -v > /dev/null 2>&1; do sleep 3; done'
                                     """,
                                     execTimeout: 600000,
                                     flatten: false,
@@ -688,7 +688,7 @@ pipeline {
                                 sshTransfer(
                                     cleanRemote: false,
                                     excludes: '',
-                                    execCommand: "docker exec ${env.PROD_CONTAINER_APP} chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache",
+                                    execCommand: "docker exec -u root ${env.PROD_CONTAINER_APP} chown -R www:www /var/www/html/storage /var/www/html/bootstrap/cache",
                                     execTimeout: 120000,
                                     flatten: false,
                                     makeEmptyDirs: false,
@@ -702,7 +702,7 @@ pipeline {
                                 sshTransfer(
                                     cleanRemote: false,
                                     excludes: '',
-                                    execCommand: "docker exec ${env.PROD_CONTAINER_APP} sh -c 'rm -f /var/www/html/bootstrap/cache/*.php'",
+                                    execCommand: "docker exec -u root ${env.PROD_CONTAINER_APP} sh -c 'rm -f /var/www/html/bootstrap/cache/*.php'",
                                     execTimeout: 60000,
                                     flatten: false,
                                     makeEmptyDirs: false,
@@ -716,7 +716,7 @@ pipeline {
                                 sshTransfer(
                                     cleanRemote: false,
                                     excludes: '',
-                                    execCommand: "docker exec ${env.PROD_CONTAINER_APP} composer install --working-dir=/var/www/html --no-interaction --prefer-dist --optimize-autoloader --no-dev",
+                                    execCommand: "docker exec -u root ${env.PROD_CONTAINER_APP} composer install --working-dir=/var/www/html --no-interaction --prefer-dist --optimize-autoloader --no-dev",
                                     execTimeout: 600000,
                                     flatten: false,
                                     makeEmptyDirs: false,
@@ -730,7 +730,7 @@ pipeline {
                                 sshTransfer(
                                     cleanRemote: false,
                                     excludes: '',
-                                    execCommand: "docker exec ${env.PROD_CONTAINER_APP} sh -c 'cd /var/www/html && php artisan migrate --force'",
+                                    execCommand: "docker exec -u root ${env.PROD_CONTAINER_APP} sh -c 'cd /var/www/html && php artisan migrate --force'",
                                     execTimeout: 300000,
                                     flatten: false,
                                     makeEmptyDirs: false,
@@ -744,7 +744,7 @@ pipeline {
                                 sshTransfer(
                                     cleanRemote: false,
                                     excludes: '',
-                                    execCommand: "docker exec ${env.PROD_CONTAINER_APP} sh -c 'cd /var/www/html && php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan optimize'",
+                                    execCommand: "docker exec -u root ${env.PROD_CONTAINER_APP} sh -c 'cd /var/www/html && php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan optimize'",
                                     execTimeout: 120000,
                                     flatten: false,
                                     makeEmptyDirs: false,
@@ -758,7 +758,7 @@ pipeline {
                                 sshTransfer(
                                     cleanRemote: false,
                                     excludes: '',
-                                    execCommand: "docker exec ${env.PROD_CONTAINER_APP} chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null || true",
+                                    execCommand: "docker exec -u root ${env.PROD_CONTAINER_APP} chown -R www:www /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null || true",
                                     execTimeout: 60000,
                                     flatten: false,
                                     makeEmptyDirs: false,
