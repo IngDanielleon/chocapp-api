@@ -1,223 +1,2668 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="es">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChocApp — Presentación Oficial</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/lucide-static@0.378.0/font/lucide.min.css" rel="stylesheet">
+  <style>
+    /* ══════════════════════════════════════════════
+   DESIGN SYSTEM TOKENS — ChocApp Official
+══════════════════════════════════════════════ */
+    :root {
+      /* Surface */
+      --surface: #f8f9fa;
+      --surface-dim: #d9dadb;
+      --surface-container-lowest: #ffffff;
+      --surface-container-low: #f3f4f5;
+      --surface-container: #edeeef;
+      --surface-container-high: #e7e8e9;
+      --surface-container-highest: #e1e3e4;
+      --on-surface: #191c1d;
+      --on-surface-variant: #5c403c;
+      --inverse-surface: #2e3132;
+      --inverse-on-surface: #f0f1f2;
+      --outline: #916f6b;
+      --outline-variant: #e6bdb8;
 
-        @fonts
+      /* Primary — Emergency Red */
+      --primary: #bb020f;
+      --primary-container: #e02a25;
+      --on-primary: #ffffff;
+      --on-primary-container: #fffbff;
+      --inverse-primary: #ffb4aa;
+      --surface-tint: #bf0811;
+      --primary-fixed: #ffdad5;
+      --primary-fixed-dim: #ffb4aa;
+      --on-primary-fixed: #410001;
+      --on-primary-fixed-variant: #930008;
 
-        <!-- Styles / Scripts -->
-        @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-            @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @else
+      /* Secondary — Dark Navy */
+      --secondary: #5d5c74;
+      --on-secondary: #ffffff;
+      --secondary-container: #e2e0fc;
+      --on-secondary-container: #63627a;
+      --secondary-fixed: #e2e0fc;
+      --secondary-fixed-dim: #c6c4df;
+      --on-secondary-fixed: #1a1a2e;
+      --on-secondary-fixed-variant: #45455b;
+
+      /* Tertiary — Alert Amber */
+      --tertiary: #805200;
+      --on-tertiary: #ffffff;
+      --tertiary-container: #a16900;
+      --on-tertiary-container: #fffbff;
+      --tertiary-fixed: #ffddb4;
+      --tertiary-fixed-dim: #ffb955;
+      --on-tertiary-fixed: #291800;
+      --on-tertiary-fixed-variant: #633f00;
+
+      /* Error */
+      --error: #ba1a1a;
+      --on-error: #ffffff;
+      --error-container: #ffdad6;
+      --on-error-container: #93000a;
+
+      /* Background */
+      --background: #f8f9fa;
+      --on-background: #191c1d;
+
+      /* Semantic extras (from component spec) */
+      --action-btn: #E8302A;
+      --navy: #1A1A2E;
+      --success: #27AE60;
+      --amber: #F5A623;
+
+      /* Typography scale */
+      --font: 'Inter', sans-serif;
+      --display-lg: 700 32px/40px var(--font);
+      --headline-md: 700 24px/32px var(--font);
+      --headline-sm: 600 20px/28px var(--font);
+      --body-lg: 400 18px/28px var(--font);
+      --body-md: 400 16px/24px var(--font);
+      --body-sm: 400 14px/20px var(--font);
+      --label-lg: 600 14px/20px var(--font);
+      --label-md: 600 12px/16px var(--font);
+
+      /* Radius */
+      --r-sm: 0.25rem;
+      --r: 0.5rem;
+      --r-md: 0.75rem;
+      --r-lg: 1rem;
+      --r-xl: 1.5rem;
+      --r-full: 9999px;
+
+      /* Elevation */
+      --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --shadow-elevated: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+      /* Spacing */
+      --gutter: 16px;
+      --margin: 20px;
+      --tap: 56px;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font: var(--body-md);
+      background: var(--background);
+      color: var(--on-background);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ══════════════════════════════════════════════
+   LAYOUT
+══════════════════════════════════════════════ */
+    .section {
+      padding: 80px var(--margin);
+    }
+
+    .container {
+      max-width: 1160px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* ══════════════════════════════════════════════
+   COMPONENTS
+══════════════════════════════════════════════ */
+
+    /* Badge */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: var(--r-full);
+      font: var(--label-md);
+      letter-spacing: 0.02em;
+    }
+
+    .badge-primary {
+      background: rgba(232, 48, 42, 0.12);
+      color: var(--primary);
+    }
+
+    .badge-navy {
+      background: rgba(26, 26, 46, 0.08);
+      color: var(--navy);
+    }
+
+    .badge-success {
+      background: rgba(39, 174, 96, 0.12);
+      color: var(--success);
+    }
+
+    .badge-amber {
+      background: rgba(245, 166, 35, 0.12);
+      color: var(--tertiary);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: var(--tap);
+      padding: 0 24px;
+      border: none;
+      border-radius: var(--r);
+      font: var(--label-lg);
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.15s, box-shadow 0.15s;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      opacity: 0.88;
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: var(--action-btn);
+      color: var(--on-primary);
+      box-shadow: 0 4px 16px rgba(232, 48, 42, 0.30);
+    }
+
+    .btn-secondary {
+      background: var(--navy);
+      color: #fff;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--navy);
+      border: 1.5px solid var(--outline-variant);
+    }
+
+    /* Card */
+    .card {
+      background: var(--surface-container-lowest);
+      border-radius: var(--r-md);
+      box-shadow: var(--shadow-card);
+      padding: 24px;
+    }
+
+    .card-high {
+      box-shadow: var(--shadow-elevated);
+    }
+
+    /* Input mock */
+    .input-mock {
+      height: var(--tap);
+      border: 1px solid #D1D5DB;
+      border-radius: var(--r-md);
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      font: var(--body-md);
+      color: var(--on-surface-variant);
+      background: var(--surface-container-lowest);
+    }
+
+    .input-mock.focused {
+      border: 2px solid var(--navy);
+      color: var(--on-surface);
+    }
+
+    /* Section label */
+    .section-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .section-eyebrow span {
+      font: var(--label-md);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--primary);
+    }
+
+    .eyebrow-line {
+      width: 32px;
+      height: 2px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    /* Divider */
+    .divider {
+      height: 1px;
+      background: var(--surface-container-high);
+      margin: 0;
+    }
+
+    /* Step dot */
+    .step-dot {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--r-full);
+      background: var(--primary-fixed);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font: var(--label-lg);
+      flex-shrink: 0;
+    }
+
+    .step-dot.active {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+
+    /* Icon container */
+    .icon-wrap {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--r-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .icon-wrap-primary {
+      background: var(--primary-fixed);
+      color: var(--primary);
+    }
+
+    .icon-wrap-navy {
+      background: var(--secondary-fixed);
+      color: var(--navy);
+    }
+
+    .icon-wrap-amber {
+      background: var(--tertiary-fixed);
+      color: var(--tertiary);
+    }
+
+    .icon-wrap-success {
+      background: rgba(39, 174, 96, 0.12);
+      color: var(--success);
+    }
+
+    /* ══════════════════════════════════════════════
+   NAV
+══════════════════════════════════════════════ */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(248, 249, 250, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--surface-container-high);
+    }
+
+    .nav-inner {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 var(--margin);
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font: var(--headline-sm);
+      color: var(--on-surface);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-logo-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: var(--r-full);
+      background: var(--primary);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font: var(--label-lg);
+      color: var(--on-surface-variant);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover {
+      color: var(--on-surface);
+    }
+
+    .nav-cta {
+      display: flex;
+      align-items: center;
+    }
+
+    /* ══════════════════════════════════════════════
+   HERO
+══════════════════════════════════════════════ */
+    .hero {
+      background: var(--surface-container-lowest);
+      border-bottom: 1px solid var(--surface-container-high);
+      padding: 60px var(--margin) 64px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -120px;
+      right: -80px;
+      width: 520px;
+      height: 520px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(187, 2, 15, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      max-width: 1160px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .hero-kicker {
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font: var(--display-lg);
+      letter-spacing: -0.02em;
+      color: var(--on-surface);
+      margin-bottom: 16px;
+      font-size: clamp(28px, 4vw, 48px);
+      line-height: 1.1;
+    }
+
+    .hero-title em {
+      font-style: normal;
+      color: var(--primary);
+    }
+
+    .hero-body {
+      font: var(--body-lg);
+      color: var(--on-surface-variant);
+      margin-bottom: 32px;
+      max-width: 520px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      padding-top: 32px;
+      border-top: 1px solid var(--surface-container-high);
+    }
+
+    .hero-stat-num {
+      font: var(--display-lg);
+      letter-spacing: -0.02em;
+      color: var(--primary);
+      display: block;
+    }
+
+    .hero-stat-label {
+      font: var(--body-sm);
+      color: var(--on-surface-variant);
+      max-width: 120px;
+    }
+
+    /* Phone mockup in hero */
+    .phone-wrap {
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+
+    .phone-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -32px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(187, 2, 15, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .phone {
+      width: 500px;
+      border-radius: 36px;
+      padding: 20px 14px;
+      box-shadow: var(--shadow-elevated), 0 0 0 1px rgba(255, 255, 255, 0.06);
+      position: relative;
+      z-index: 1;
+    }
+
+    .phone-notch {
+      width: 60px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: var(--r-full);
+      margin: 0 auto 20px;
+    }
+
+    .phone-screen {
+      background: #0f0f0f;
+      border-radius: 20px;
+      padding: 20px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      min-height: 340px;
+    }
+
+    .phone-app-title {
+      font: var(--label-lg);
+      color: rgba(255, 255, 255, 0.7);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 10px;
+    }
+
+    .sos-btn {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #E8302A, #8B0000);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      box-shadow: 0 0 0 8px rgba(232, 48, 42, 0.08), 0 0 0 20px rgba(232, 48, 42, 0.04), 0 8px 32px rgba(232, 48, 42, 0.45);
+      animation: pulse-sos 2.4s ease-in-out infinite;
+      cursor: pointer;
+    }
+
+    .sos-label {
+      font-weight: 700;
+      font-size: 18px;
+      color: white;
+      font-family: var(--font);
+      letter-spacing: 0.04em;
+    }
+
+    .sos-sub {
+      font-size: 8px;
+      color: rgba(255, 255, 255, 0.75);
+      font-family: var(--font);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .phone-steps-preview {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .phone-step-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 8px 10px;
+    }
+
+    .phone-step-indicator {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .phone-step-bar {
+      height: 5px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: var(--r-full);
+      flex: 1;
+    }
+
+    .phone-step-bar.done {
+      background: rgba(39, 174, 96, 0.4);
+    }
+
+    .phone-step-bar.active {
+      background: rgba(232, 48, 42, 0.4);
+    }
+
+    @keyframes pulse-sos {
+
+      0%,
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 8px rgba(232, 48, 42, 0.08), 0 0 0 20px rgba(232, 48, 42, 0.04), 0 8px 32px rgba(232, 48, 42, 0.45);
+      }
+
+      50% {
+        transform: scale(1.04);
+        box-shadow: 0 0 0 12px rgba(232, 48, 42, 0.10), 0 0 0 28px rgba(232, 48, 42, 0.05), 0 12px 40px rgba(232, 48, 42, 0.50);
+      }
+    }
+
+    /* ══════════════════════════════════════════════
+   PROBLEMA
+══════════════════════════════════════════════ */
+    .problema {
+      background: var(--surface);
+    }
+
+    .problema-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 40px;
+    }
+
+    .problema-card {
+      padding: 28px 24px;
+      border-left: 3px solid transparent;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .problema-card:hover {
+      border-left-color: var(--primary);
+      box-shadow: var(--shadow-elevated);
+    }
+
+    .problema-card-title {
+      font: var(--headline-sm);
+      color: var(--on-surface);
+      margin: 16px 0 8px;
+    }
+
+    .problema-card-body {
+      font: var(--body-md);
+      color: var(--on-surface-variant);
+      line-height: 24px;
+    }
+
+    /* ══════════════════════════════════════════════
+   SOLUCIÓN / PASOS
+══════════════════════════════════════════════ */
+    .solucion {
+      background: var(--surface-container-lowest);
+      border-top: 1px solid var(--surface-container-high);
+      border-bottom: 1px solid var(--surface-container-high);
+    }
+
+    .solucion-inner {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .pasos-list {
+      display: flex;
+      flex-direction: column;
+      margin-top: 36px;
+    }
+
+    .paso-item {
+      display: flex;
+      gap: 16px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--surface-container-high);
+      transition: background 0.15s;
+      cursor: default;
+    }
+
+    .paso-item:last-child {
+      border-bottom: none;
+    }
+
+    .paso-item:hover .step-dot {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+
+    .paso-content {
+      flex: 1;
+    }
+
+    .paso-title {
+      font: var(--label-lg);
+      color: var(--on-surface);
+      margin-bottom: 4px;
+    }
+
+    .paso-desc {
+      font: var(--body-sm);
+      color: var(--on-surface-variant);
+      line-height: 20px;
+    }
+
+    /* Paso visual panel */
+    .paso-panel {
+      margin-top: 36px;
+      position: sticky;
+      top: 80px;
+    }
+
+    .paso-panel-screen {
+      background: var(--surface-container-lowest);
+      border: 1px solid var(--surface-container-high);
+      border-radius: var(--r-lg);
+      box-shadow: var(--shadow-elevated);
+      overflow: hidden;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--surface-container-high);
+      background: var(--surface-container-low);
+    }
+
+    .panel-dots span {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 4px;
+    }
+
+    .panel-title {
+      font: var(--label-lg);
+      color: var(--on-surface);
+      margin-left: 4px;
+    }
+
+    .panel-body {
+      padding: 24px 20px;
+    }
+
+    .panel-step-indicator {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    .panel-step-pip {
+      height: 4px;
+      border-radius: var(--r-full);
+      flex: 1;
+      background: var(--surface-container-high);
+    }
+
+    .panel-step-pip.done {
+      background: var(--success);
+    }
+
+    .panel-step-pip.active {
+      background: var(--primary);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      font: var(--label-md);
+      color: var(--on-surface-variant);
+      letter-spacing: 0.02em;
+      display: block;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .photo-area {
+      border: 1.5px dashed var(--outline-variant);
+      border-radius: var(--r-md);
+      padding: 20px;
+      text-align: center;
+      background: var(--primary-fixed);
+      margin-top: 4px;
+    }
+
+    .photo-area-icon {
+      font-size: 20px;
+      margin-bottom: 6px;
+    }
+
+    .photo-area-text {
+      font: var(--body-sm);
+      color: var(--on-surface-variant);
+    }
+
+    /* ══════════════════════════════════════════════
+   BENEFICIOS
+══════════════════════════════════════════════ */
+    .beneficios {
+      background: var(--surface);
+    }
+
+    .beneficios-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 40px;
+    }
+
+    .beneficio-card {
+      padding: 28px 24px;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .beneficio-card:hover {
+      box-shadow: var(--shadow-elevated);
+      transform: translateY(-3px);
+    }
+
+    .beneficio-title {
+      font: var(--headline-sm);
+      color: var(--on-surface);
+      margin: 16px 0 8px;
+    }
+
+    .beneficio-body {
+      font: var(--body-sm);
+      color: var(--on-surface-variant);
+      line-height: 20px;
+    }
+
+    /* ══════════════════════════════════════════════
+   PÚBLICO OBJETIVO
+══════════════════════════════════════════════ */
+    .publico {
+      background: var(--navy);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .publico::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: rgba(187, 2, 15, 0.08);
+      pointer-events: none;
+    }
+
+    .publico .section-eyebrow span {
+      color: var(--inverse-primary);
+    }
+
+    .publico .eyebrow-line {
+      background: var(--inverse-primary);
+    }
+
+    .publico-title {
+      font: var(--display-lg);
+      letter-spacing: -0.02em;
+      color: var(--inverse-on-surface);
+      margin-bottom: 12px;
+    }
+
+    .publico-subtitle {
+      font: var(--body-lg);
+      color: rgba(255, 255, 255, 0.55);
+      margin-bottom: 40px;
+    }
+
+    .publico-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .publico-card {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--r-md);
+      padding: 24px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .publico-card:hover {
+      background: rgba(255, 255, 255, 0.09);
+      border-color: rgba(187, 2, 15, 0.35);
+    }
+
+    .publico-card-title {
+      font: var(--label-lg);
+      color: #fff;
+      margin: 12px 0 6px;
+    }
+
+    .publico-card-body {
+      font: var(--body-sm);
+      color: rgba(255, 255, 255, 0.55);
+      line-height: 20px;
+    }
+
+    /* ══════════════════════════════════════════════
+   ARQUITECTURA / REPORTE
+══════════════════════════════════════════════ */
+    .reporte {
+      background: var(--surface-container-lowest);
+      border-top: 1px solid var(--surface-container-high);
+    }
+
+    .reporte-inner {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .feature-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 32px;
+    }
+
+    .feature-row {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .feature-check {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(39, 174, 96, 0.12);
+      color: var(--success);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .feature-text {
+      font: var(--body-md);
+      color: var(--on-surface-variant);
+      line-height: 24px;
+    }
+
+    .feature-text strong {
+      color: var(--on-surface);
+      font-weight: 600;
+    }
+
+    /* PDF card mockup */
+    .pdf-mockup {
+      background: var(--surface-container-lowest);
+      border: 1px solid var(--surface-container-high);
+      border-radius: var(--r-lg);
+      box-shadow: var(--shadow-elevated);
+      overflow: hidden;
+      margin-top: 40px;
+    }
+
+    .pdf-header {
+      padding: 16px 20px;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .pdf-header-title {
+      font: var(--label-lg);
+      color: var(--on-primary);
+    }
+
+    .pdf-badge {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font: var(--label-md);
+      padding: 3px 10px;
+      border-radius: var(--r-full);
+    }
+
+    .pdf-body {
+      padding: 20px;
+    }
+
+    .pdf-section-title {
+      font: var(--label-md);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--outline);
+      margin-bottom: 12px;
+      margin-top: 20px;
+    }
+
+    .pdf-section-title:first-child {
+      margin-top: 0;
+    }
+
+    .pdf-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .pdf-field-label {
+      font: var(--body-sm);
+      color: var(--on-surface-variant);
+      margin-bottom: 2px;
+    }
+
+    .pdf-field-value {
+      font: var(--label-lg);
+      color: var(--on-surface);
+    }
+
+    .pdf-divider {
+      height: 1px;
+      background: var(--surface-container-high);
+      margin: 16px 0;
+    }
+
+    .pdf-photos {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .pdf-photo {
+      border-radius: var(--r-sm);
+      aspect-ratio: 1;
+      background: var(--surface-container);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--outline);
+      font-size: 18px;
+    }
+
+    .pdf-footer {
+      padding: 14px 20px;
+      background: var(--surface-container-low);
+      border-top: 1px solid var(--surface-container-high);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .pdf-footer-text {
+      font: var(--body-sm);
+      color: var(--on-surface-variant);
+    }
+
+    .pdf-export-btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--r);
+      padding: 0 16px;
+      height: 36px;
+      font: var(--label-md);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ══════════════════════════════════════════════
+   CTA
+══════════════════════════════════════════════ */
+    .cta-section {
+      background: var(--surface);
+      border-top: 1px solid var(--surface-container-high);
+      padding: 96px var(--margin);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 500px;
+      height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(187, 2, 15, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-title {
+      font: var(--display-lg);
+      letter-spacing: -0.02em;
+      color: var(--on-surface);
+      margin-bottom: 12px;
+      font-size: clamp(24px, 3.5vw, 36px);
+    }
+
+    .cta-body {
+      font: var(--body-lg);
+      color: var(--on-surface-variant);
+      max-width: 440px;
+      margin: 0 auto 32px;
+    }
+
+    .cta-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ══════════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════ */
+    footer {
+      background: var(--inverse-surface);
+      padding: 24px var(--margin);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-logo {
+      font: var(--label-lg);
+      color: var(--inverse-on-surface);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-logo-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+
+    .footer-text {
+      font: var(--body-sm);
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    /* ══════════════════════════════════════════════
+   FADE-IN ON SCROLL
+══════════════════════════════════════════════ */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* Stagger */
+    .stagger>* {
+      transition-delay: calc(var(--i, 0) * 80ms);
+    }
+
+    /* ══════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════ */
+    @media (max-width: 960px) {
+
+      .hero-inner,
+      .solucion-inner,
+      .reporte-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .phone-wrap {
+        display: none;
+      }
+
+      .problema-grid,
+      .publico-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .beneficios-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hero-stats {
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .beneficios-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section {
+        padding: 56px 16px;
+      }
+
+      .hero {
+        padding: 56px 16px 48px;
+      }
+
+      footer {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ╔══════════════════════════════════════════╗ -->
+  <!-- ║  NAV                                     ║ -->
+  <!-- ╚══════════════════════════════════════════╝ -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <div class="nav-logo">
+        <div class="nav-logo-dot"></div>
+        ChocApp
+      </div>
+      <ul class="nav-links">
+        <li><a href="#problema">Problemática</a></li>
+        <li><a href="#solucion">Solución</a></li>
+        <li><a href="#beneficios">Beneficios</a></li>
+        <li><a href="#reporte">Reporte</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="#cta" class="btn btn-primary" style="height:40px;padding:0 18px;font-size:13px;">Descargar</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ╔══════════════════════════════════════════╗ -->
+  <!-- ║  HERO                                    ║ -->
+  <!-- ╚══════════════════════════════════════════╝ -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-kicker">
+          <span class="badge badge-primary">Aplicación móvil · Android</span>
+        </div>
+        <h1 class="hero-title fade-in">
+          Cuando el pánico toma el control,<br>
+          <em>ChocApp actúa.</em>
+        </h1>
+        <p class="hero-body fade-in">
+          Una guía paso a paso para los primeros minutos después de un accidente. Recopila evidencia, documenta el
+          incidente y genera el reporte para tu aseguradora, todo desde tu celular.
+        </p>
+        <div class="hero-actions fade-in">
+          <a href="#solucion" class="btn btn-primary">Ver cómo funciona</a>
+          <a href="#beneficios" class="btn btn-outline">Beneficios</a>
+        </div>
+        <div class="hero-stats fade-in">
+          <div>
+            <span class="hero-stat-num">680K+</span>
+            <span class="hero-stat-label">Accidentes viales al año en Colombia</span>
+          </div>
+          <div>
+            <span class="hero-stat-num">72%</span>
+            <span class="hero-stat-label">De afectados no saben qué hacer</span>
+          </div>
+          <div>
+            <span class="hero-stat-num">3×</span>
+            <span class="hero-stat-label">Más rápido con guía estructurada</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phone mockup -->
+      <div class="phone-wrap fade-in">
+        <div class="phone">
+          <!DOCTYPE html>
+
+          <html class="light" lang="es">
+
+          <head>
+            <meta charset="utf-8" />
+            <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+            <title>ChocApp - Dashboard</title>
+            <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap"
+              rel="stylesheet" />
+            <link
+              href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+              rel="stylesheet" />
+            <link
+              href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+              rel="stylesheet" />
+            <script id="tailwind-config">
+              tailwind.config = {
+                darkMode: "class",
+                theme: {
+                  extend: {
+                    "colors": {
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-container": "#fffbff",
+                      "on-primary": "#ffffff",
+                      "surface-bright": "#f8f9fa",
+                      "on-tertiary-container": "#fffbff",
+                      "secondary-fixed": "#e2e0fc",
+                      "on-tertiary-fixed-variant": "#633f00",
+                      "surface-container": "#edeeef",
+                      "surface-tint": "#bf0811",
+                      "on-secondary-fixed-variant": "#45455b",
+                      "on-error": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "on-background": "#191c1d",
+                      "outline": "#916f6b",
+                      "primary": "#bb020f",
+                      "surface-container-low": "#f3f4f5",
+                      "outline-variant": "#e6bdb8",
+                      "secondary": "#5d5c74",
+                      "inverse-on-surface": "#f0f1f2",
+                      "on-secondary-fixed": "#1a1a2e",
+                      "inverse-primary": "#ffb4aa",
+                      "on-surface": "#191c1d",
+                      "tertiary": "#805200",
+                      "on-secondary": "#ffffff",
+                      "primary-container": "#e02a25",
+                      "error-container": "#ffdad6",
+                      "secondary-fixed-dim": "#c6c4df",
+                      "tertiary-fixed": "#ffddb4",
+                      "background": "#f8f9fa",
+                      "inverse-surface": "#2e3132",
+                      "surface-variant": "#e1e3e4",
+                      "on-surface-variant": "#5c403c",
+                      "surface-container-highest": "#e1e3e4",
+                      "surface-container-high": "#e7e8e9",
+                      "on-primary-fixed": "#410001",
+                      "on-tertiary-fixed": "#291800",
+                      "secondary-container": "#e2e0fc",
+                      "error": "#ba1a1a",
+                      "on-secondary-container": "#63627a",
+                      "tertiary-fixed-dim": "#ffb955",
+                      "surface-dim": "#d9dadb",
+                      "surface": "#f8f9fa",
+                      "tertiary-container": "#a16900",
+                      "on-primary-fixed-variant": "#930008",
+                      "primary-fixed": "#ffdad5",
+                      "primary-fixed-dim": "#ffb4aa",
+                      "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+                    },
+                    "spacing": {
+                      "margin-mobile": "20px",
+                      "container-padding": "16px",
+                      "unit": "4px",
+                      "tap-target-min": "56px",
+                      "gutter": "16px"
+                    },
+                    "fontFamily": {
+                      "headline-sm": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "label-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "label-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                      "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                      "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                      "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                      "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                      "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                      "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                      "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                      "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }]
+                    }
+                  },
+                },
+              }
+            </script>
             <style>
-                /*! tailwindcss v4.0.7 | MIT License | https://tailwindcss.com */ @layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-translate-x:0;--tw-translate-y:0;--tw-translate-z:0;--tw-rotate-x:initial;--tw-rotate-y:initial;--tw-rotate-z:initial;--tw-skew-x:initial;--tw-skew-y:initial;--tw-space-x-reverse:0;--tw-border-style:solid;--tw-leading:initial;--tw-font-weight:initial;--tw-tracking:initial;--tw-shadow:0 0 #0000;--tw-shadow-color:initial;--tw-shadow-alpha:100%;--tw-inset-shadow:0 0 #0000;--tw-inset-shadow-color:initial;--tw-inset-shadow-alpha:100%;--tw-ring-color:initial;--tw-ring-shadow:0 0 #0000;--tw-inset-ring-color:initial;--tw-inset-ring-shadow:0 0 #0000;--tw-ring-inset:initial;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-offset-shadow:0 0 #0000;--tw-blur:initial;--tw-brightness:initial;--tw-contrast:initial;--tw-grayscale:initial;--tw-hue-rotate:initial;--tw-invert:initial;--tw-opacity:initial;--tw-saturate:initial;--tw-sepia:initial;--tw-drop-shadow:initial;--tw-drop-shadow-color:initial;--tw-drop-shadow-alpha:100%;--tw-drop-shadow-size:initial;--tw-duration:initial;--tw-ease:initial;--tw-content:""}}}@layer theme{:root,:host{--font-sans:"Instrument Sans", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";--font-serif:ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;--font-mono:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;--color-red-50:oklch(97.1% .013 17.38);--color-red-100:oklch(93.6% .032 17.717);--color-red-200:oklch(88.5% .062 18.334);--color-red-300:oklch(80.8% .114 19.571);--color-red-400:oklch(70.4% .191 22.216);--color-red-500:oklch(63.7% .237 25.331);--color-red-600:oklch(57.7% .245 27.325);--color-red-700:oklch(50.5% .213 27.518);--color-red-800:oklch(44.4% .177 26.899);--color-red-900:oklch(39.6% .141 25.723);--color-red-950:oklch(25.8% .092 26.042);--color-orange-50:oklch(98% .016 73.684);--color-orange-100:oklch(95.4% .038 75.164);--color-orange-200:oklch(90.1% .076 70.697);--color-orange-300:oklch(83.7% .128 66.29);--color-orange-400:oklch(75% .183 55.934);--color-orange-500:oklch(70.5% .213 47.604);--color-orange-600:oklch(64.6% .222 41.116);--color-orange-700:oklch(55.3% .195 38.402);--color-orange-800:oklch(47% .157 37.304);--color-orange-900:oklch(40.8% .123 38.172);--color-orange-950:oklch(26.6% .079 36.259);--color-amber-50:oklch(98.7% .022 95.277);--color-amber-100:oklch(96.2% .059 95.617);--color-amber-200:oklch(92.4% .12 95.746);--color-amber-300:oklch(87.9% .169 91.605);--color-amber-400:oklch(82.8% .189 84.429);--color-amber-500:oklch(76.9% .188 70.08);--color-amber-600:oklch(66.6% .179 58.318);--color-amber-700:oklch(55.5% .163 48.998);--color-amber-800:oklch(47.3% .137 46.201);--color-amber-900:oklch(41.4% .112 45.904);--color-amber-950:oklch(27.9% .077 45.635);--color-yellow-50:oklch(98.7% .026 102.212);--color-yellow-100:oklch(97.3% .071 103.193);--color-yellow-200:oklch(94.5% .129 101.54);--color-yellow-300:oklch(90.5% .182 98.111);--color-yellow-400:oklch(85.2% .199 91.936);--color-yellow-500:oklch(79.5% .184 86.047);--color-yellow-600:oklch(68.1% .162 75.834);--color-yellow-700:oklch(55.4% .135 66.442);--color-yellow-800:oklch(47.6% .114 61.907);--color-yellow-900:oklch(42.1% .095 57.708);--color-yellow-950:oklch(28.6% .066 53.813);--color-lime-50:oklch(98.6% .031 120.757);--color-lime-100:oklch(96.7% .067 122.328);--color-lime-200:oklch(93.8% .127 124.321);--color-lime-300:oklch(89.7% .196 126.665);--color-lime-400:oklch(84.1% .238 128.85);--color-lime-500:oklch(76.8% .233 130.85);--color-lime-600:oklch(64.8% .2 131.684);--color-lime-700:oklch(53.2% .157 131.589);--color-lime-800:oklch(45.3% .124 130.933);--color-lime-900:oklch(40.5% .101 131.063);--color-lime-950:oklch(27.4% .072 132.109);--color-green-50:oklch(98.2% .018 155.826);--color-green-100:oklch(96.2% .044 156.743);--color-green-200:oklch(92.5% .084 155.995);--color-green-300:oklch(87.1% .15 154.449);--color-green-400:oklch(79.2% .209 151.711);--color-green-500:oklch(72.3% .219 149.579);--color-green-600:oklch(62.7% .194 149.214);--color-green-700:oklch(52.7% .154 150.069);--color-green-800:oklch(44.8% .119 151.328);--color-green-900:oklch(39.3% .095 152.535);--color-green-950:oklch(26.6% .065 152.934);--color-emerald-50:oklch(97.9% .021 166.113);--color-emerald-100:oklch(95% .052 163.051);--color-emerald-200:oklch(90.5% .093 164.15);--color-emerald-300:oklch(84.5% .143 164.978);--color-emerald-400:oklch(76.5% .177 163.223);--color-emerald-500:oklch(69.6% .17 162.48);--color-emerald-600:oklch(59.6% .145 163.225);--color-emerald-700:oklch(50.8% .118 165.612);--color-emerald-800:oklch(43.2% .095 166.913);--color-emerald-900:oklch(37.8% .077 168.94);--color-emerald-950:oklch(26.2% .051 172.552);--color-teal-50:oklch(98.4% .014 180.72);--color-teal-100:oklch(95.3% .051 180.801);--color-teal-200:oklch(91% .096 180.426);--color-teal-300:oklch(85.5% .138 181.071);--color-teal-400:oklch(77.7% .152 181.912);--color-teal-500:oklch(70.4% .14 182.503);--color-teal-600:oklch(60% .118 184.704);--color-teal-700:oklch(51.1% .096 186.391);--color-teal-800:oklch(43.7% .078 188.216);--color-teal-900:oklch(38.6% .063 188.416);--color-teal-950:oklch(27.7% .046 192.524);--color-cyan-50:oklch(98.4% .019 200.873);--color-cyan-100:oklch(95.6% .045 203.388);--color-cyan-200:oklch(91.7% .08 205.041);--color-cyan-300:oklch(86.5% .127 207.078);--color-cyan-400:oklch(78.9% .154 211.53);--color-cyan-500:oklch(71.5% .143 215.221);--color-cyan-600:oklch(60.9% .126 221.723);--color-cyan-700:oklch(52% .105 223.128);--color-cyan-800:oklch(45% .085 224.283);--color-cyan-900:oklch(39.8% .07 227.392);--color-cyan-950:oklch(30.2% .056 229.695);--color-sky-50:oklch(97.7% .013 236.62);--color-sky-100:oklch(95.1% .026 236.824);--color-sky-200:oklch(90.1% .058 230.902);--color-sky-300:oklch(82.8% .111 230.318);--color-sky-400:oklch(74.6% .16 232.661);--color-sky-500:oklch(68.5% .169 237.323);--color-sky-600:oklch(58.8% .158 241.966);--color-sky-700:oklch(50% .134 242.749);--color-sky-800:oklch(44.3% .11 240.79);--color-sky-900:oklch(39.1% .09 240.876);--color-sky-950:oklch(29.3% .066 243.157);--color-blue-50:oklch(97% .014 254.604);--color-blue-100:oklch(93.2% .032 255.585);--color-blue-200:oklch(88.2% .059 254.128);--color-blue-300:oklch(80.9% .105 251.813);--color-blue-400:oklch(70.7% .165 254.624);--color-blue-500:oklch(62.3% .214 259.815);--color-blue-600:oklch(54.6% .245 262.881);--color-blue-700:oklch(48.8% .243 264.376);--color-blue-800:oklch(42.4% .199 265.638);--color-blue-900:oklch(37.9% .146 265.522);--color-blue-950:oklch(28.2% .091 267.935);--color-indigo-50:oklch(96.2% .018 272.314);--color-indigo-100:oklch(93% .034 272.788);--color-indigo-200:oklch(87% .065 274.039);--color-indigo-300:oklch(78.5% .115 274.713);--color-indigo-400:oklch(67.3% .182 276.935);--color-indigo-500:oklch(58.5% .233 277.117);--color-indigo-600:oklch(51.1% .262 276.966);--color-indigo-700:oklch(45.7% .24 277.023);--color-indigo-800:oklch(39.8% .195 277.366);--color-indigo-900:oklch(35.9% .144 278.697);--color-indigo-950:oklch(25.7% .09 281.288);--color-violet-50:oklch(96.9% .016 293.756);--color-violet-100:oklch(94.3% .029 294.588);--color-violet-200:oklch(89.4% .057 293.283);--color-violet-300:oklch(81.1% .111 293.571);--color-violet-400:oklch(70.2% .183 293.541);--color-violet-500:oklch(60.6% .25 292.717);--color-violet-600:oklch(54.1% .281 293.009);--color-violet-700:oklch(49.1% .27 292.581);--color-violet-800:oklch(43.2% .232 292.759);--color-violet-900:oklch(38% .189 293.745);--color-violet-950:oklch(28.3% .141 291.089);--color-purple-50:oklch(97.7% .014 308.299);--color-purple-100:oklch(94.6% .033 307.174);--color-purple-200:oklch(90.2% .063 306.703);--color-purple-300:oklch(82.7% .119 306.383);--color-purple-400:oklch(71.4% .203 305.504);--color-purple-500:oklch(62.7% .265 303.9);--color-purple-600:oklch(55.8% .288 302.321);--color-purple-700:oklch(49.6% .265 301.924);--color-purple-800:oklch(43.8% .218 303.724);--color-purple-900:oklch(38.1% .176 304.987);--color-purple-950:oklch(29.1% .149 302.717);--color-fuchsia-50:oklch(97.7% .017 320.058);--color-fuchsia-100:oklch(95.2% .037 318.852);--color-fuchsia-200:oklch(90.3% .076 319.62);--color-fuchsia-300:oklch(83.3% .145 321.434);--color-fuchsia-400:oklch(74% .238 322.16);--color-fuchsia-500:oklch(66.7% .295 322.15);--color-fuchsia-600:oklch(59.1% .293 322.896);--color-fuchsia-700:oklch(51.8% .253 323.949);--color-fuchsia-800:oklch(45.2% .211 324.591);--color-fuchsia-900:oklch(40.1% .17 325.612);--color-fuchsia-950:oklch(29.3% .136 325.661);--color-pink-50:oklch(97.1% .014 343.198);--color-pink-100:oklch(94.8% .028 342.258);--color-pink-200:oklch(89.9% .061 343.231);--color-pink-300:oklch(82.3% .12 346.018);--color-pink-400:oklch(71.8% .202 349.761);--color-pink-500:oklch(65.6% .241 354.308);--color-pink-600:oklch(59.2% .249 .584);--color-pink-700:oklch(52.5% .223 3.958);--color-pink-800:oklch(45.9% .187 3.815);--color-pink-900:oklch(40.8% .153 2.432);--color-pink-950:oklch(28.4% .109 3.907);--color-rose-50:oklch(96.9% .015 12.422);--color-rose-100:oklch(94.1% .03 12.58);--color-rose-200:oklch(89.2% .058 10.001);--color-rose-300:oklch(81% .117 11.638);--color-rose-400:oklch(71.2% .194 13.428);--color-rose-500:oklch(64.5% .246 16.439);--color-rose-600:oklch(58.6% .253 17.585);--color-rose-700:oklch(51.4% .222 16.935);--color-rose-800:oklch(45.5% .188 13.697);--color-rose-900:oklch(41% .159 10.272);--color-rose-950:oklch(27.1% .105 12.094);--color-slate-50:oklch(98.4% .003 247.858);--color-slate-100:oklch(96.8% .007 247.896);--color-slate-200:oklch(92.9% .013 255.508);--color-slate-300:oklch(86.9% .022 252.894);--color-slate-400:oklch(70.4% .04 256.788);--color-slate-500:oklch(55.4% .046 257.417);--color-slate-600:oklch(44.6% .043 257.281);--color-slate-700:oklch(37.2% .044 257.287);--color-slate-800:oklch(27.9% .041 260.031);--color-slate-900:oklch(20.8% .042 265.755);--color-slate-950:oklch(12.9% .042 264.695);--color-gray-50:oklch(98.5% .002 247.839);--color-gray-100:oklch(96.7% .003 264.542);--color-gray-200:oklch(92.8% .006 264.531);--color-gray-300:oklch(87.2% .01 258.338);--color-gray-400:oklch(70.7% .022 261.325);--color-gray-500:oklch(55.1% .027 264.364);--color-gray-600:oklch(44.6% .03 256.802);--color-gray-700:oklch(37.3% .034 259.733);--color-gray-800:oklch(27.8% .033 256.848);--color-gray-900:oklch(21% .034 264.665);--color-gray-950:oklch(13% .028 261.692);--color-zinc-50:oklch(98.5% 0 0);--color-zinc-100:oklch(96.7% .001 286.375);--color-zinc-200:oklch(92% .004 286.32);--color-zinc-300:oklch(87.1% .006 286.286);--color-zinc-400:oklch(70.5% .015 286.067);--color-zinc-500:oklch(55.2% .016 285.938);--color-zinc-600:oklch(44.2% .017 285.786);--color-zinc-700:oklch(37% .013 285.805);--color-zinc-800:oklch(27.4% .006 286.033);--color-zinc-900:oklch(21% .006 285.885);--color-zinc-950:oklch(14.1% .005 285.823);--color-neutral-50:oklch(98.5% 0 0);--color-neutral-100:oklch(97% 0 0);--color-neutral-200:oklch(92.2% 0 0);--color-neutral-300:oklch(87% 0 0);--color-neutral-400:oklch(70.8% 0 0);--color-neutral-500:oklch(55.6% 0 0);--color-neutral-600:oklch(43.9% 0 0);--color-neutral-700:oklch(37.1% 0 0);--color-neutral-800:oklch(26.9% 0 0);--color-neutral-900:oklch(20.5% 0 0);--color-neutral-950:oklch(14.5% 0 0);--color-stone-50:oklch(98.5% .001 106.423);--color-stone-100:oklch(97% .001 106.424);--color-stone-200:oklch(92.3% .003 48.717);--color-stone-300:oklch(86.9% .005 56.366);--color-stone-400:oklch(70.9% .01 56.259);--color-stone-500:oklch(55.3% .013 58.071);--color-stone-600:oklch(44.4% .011 73.639);--color-stone-700:oklch(37.4% .01 67.558);--color-stone-800:oklch(26.8% .007 34.298);--color-stone-900:oklch(21.6% .006 56.043);--color-stone-950:oklch(14.7% .004 49.25);--color-black:#000;--color-white:#fff;--spacing:.25rem;--breakpoint-sm:40rem;--breakpoint-md:48rem;--breakpoint-lg:64rem;--breakpoint-xl:80rem;--breakpoint-2xl:96rem;--container-3xs:16rem;--container-2xs:18rem;--container-xs:20rem;--container-sm:24rem;--container-md:28rem;--container-lg:32rem;--container-xl:36rem;--container-2xl:42rem;--container-3xl:48rem;--container-4xl:56rem;--container-5xl:64rem;--container-6xl:72rem;--container-7xl:80rem;--text-xs:.75rem;--text-xs--line-height:calc(1 / .75);--text-sm:.875rem;--text-sm--line-height:calc(1.25 / .875);--text-base:1rem;--text-base--line-height: 1.5 ;--text-lg:1.125rem;--text-lg--line-height:calc(1.75 / 1.125);--text-xl:1.25rem;--text-xl--line-height:calc(1.75 / 1.25);--text-2xl:1.5rem;--text-2xl--line-height:calc(2 / 1.5);--text-3xl:1.875rem;--text-3xl--line-height: 1.2 ;--text-4xl:2.25rem;--text-4xl--line-height:calc(2.5 / 2.25);--text-5xl:3rem;--text-5xl--line-height:1;--text-6xl:3.75rem;--text-6xl--line-height:1;--text-7xl:4.5rem;--text-7xl--line-height:1;--text-8xl:6rem;--text-8xl--line-height:1;--text-9xl:8rem;--text-9xl--line-height:1;--font-weight-thin:100;--font-weight-extralight:200;--font-weight-light:300;--font-weight-normal:400;--font-weight-medium:500;--font-weight-semibold:600;--font-weight-bold:700;--font-weight-extrabold:800;--font-weight-black:900;--tracking-tighter:-.05em;--tracking-tight:-.025em;--tracking-normal:0em;--tracking-wide:.025em;--tracking-wider:.05em;--tracking-widest:.1em;--leading-tight:1.25;--leading-snug:1.375;--leading-normal:1.5;--leading-relaxed:1.625;--leading-loose:2;--radius-xs:.125rem;--radius-sm:.25rem;--radius-md:.375rem;--radius-lg:.5rem;--radius-xl:.75rem;--radius-2xl:1rem;--radius-3xl:1.5rem;--radius-4xl:2rem;--shadow-2xs:0 1px #0000000d;--shadow-xs:0 1px 2px 0 #0000000d;--shadow-sm:0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;--shadow-md:0 4px 6px -1px #0000001a, 0 2px 4px -2px #0000001a;--shadow-lg:0 10px 15px -3px #0000001a, 0 4px 6px -4px #0000001a;--shadow-xl:0 20px 25px -5px #0000001a, 0 8px 10px -6px #0000001a;--shadow-2xl:0 25px 50px -12px #00000040;--inset-shadow-2xs:inset 0 1px #0000000d;--inset-shadow-xs:inset 0 1px 1px #0000000d;--inset-shadow-sm:inset 0 2px 4px #0000000d;--drop-shadow-xs:0 1px 1px #0000000d;--drop-shadow-sm:0 1px 2px #00000026;--drop-shadow-md:0 3px 3px #0000001f;--drop-shadow-lg:0 4px 4px #00000026;--drop-shadow-xl:0 9px 7px #0000001a;--drop-shadow-2xl:0 25px 25px #00000026;--ease-in:cubic-bezier(.4, 0, 1, 1);--ease-out:cubic-bezier(0, 0, .2, 1);--ease-in-out:cubic-bezier(.4, 0, .2, 1);--animate-spin:spin 1s linear infinite;--animate-ping:ping 1s cubic-bezier(0, 0, .2, 1) infinite;--animate-pulse:pulse 2s cubic-bezier(.4, 0, .6, 1) infinite;--animate-bounce:bounce 1s infinite;--blur-xs:4px;--blur-sm:8px;--blur-md:12px;--blur-lg:16px;--blur-xl:24px;--blur-2xl:40px;--blur-3xl:64px;--perspective-dramatic:100px;--perspective-near:300px;--perspective-normal:500px;--perspective-midrange:800px;--perspective-distant:1200px;--aspect-video:16 / 9;--default-transition-duration:.15s;--default-transition-timing-function:cubic-bezier(.4, 0, .2, 1);--default-font-family:var(--font-sans);--default-mono-font-family:var(--font-mono)}}@layer base{*,:after,:before,::backdrop{box-sizing:border-box;border:0 solid;margin:0;padding:0}::file-selector-button{box-sizing:border-box;border:0 solid;margin:0;padding:0}html,:host{-webkit-text-size-adjust:100%;tab-size:4;line-height:1.5;font-family:var(--default-font-family,ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");font-feature-settings:var(--default-font-feature-settings,normal);font-variation-settings:var(--default-font-variation-settings,normal);-webkit-tap-highlight-color:transparent}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;-webkit-text-decoration:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,samp,pre{font-family:var(--default-mono-font-family,ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);font-feature-settings:var(--default-mono-font-feature-settings,normal);font-variation-settings:var(--default-mono-font-variation-settings,normal);font-size:1em}small{font-size:80%}sub,sup{vertical-align:baseline;font-size:75%;line-height:0;position:relative}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}:-moz-focusring{outline:auto}progress{vertical-align:baseline}summary{display:list-item}ol,ul,menu{list-style:none}img,svg,video,canvas,audio,iframe,embed,object{vertical-align:middle;display:block}img,video{max-width:100%;height:auto}button,input,select,optgroup,textarea{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}::file-selector-button{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}:where(select:is([multiple],[size])) optgroup{font-weight:bolder}:where(select:is([multiple],[size])) optgroup option{padding-inline-start:20px}::file-selector-button{margin-inline-end:4px}::placeholder{opacity:1}@supports (not ((-webkit-appearance:-apple-pay-button))) or (contain-intrinsic-size:1px){::placeholder{color:currentColor}@supports (color:color-mix(in lab,red,red)){::placeholder{color:color-mix(in oklab,currentcolor 50%,transparent)}}}textarea{resize:vertical}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-date-and-time-value{min-height:1lh;text-align:inherit}::-webkit-datetime-edit{display:inline-flex}::-webkit-datetime-edit-fields-wrapper{padding:0}::-webkit-datetime-edit{padding-block:0}::-webkit-datetime-edit-year-field{padding-block:0}::-webkit-datetime-edit-month-field{padding-block:0}::-webkit-datetime-edit-day-field{padding-block:0}::-webkit-datetime-edit-hour-field{padding-block:0}::-webkit-datetime-edit-minute-field{padding-block:0}::-webkit-datetime-edit-second-field{padding-block:0}::-webkit-datetime-edit-millisecond-field{padding-block:0}::-webkit-datetime-edit-meridiem-field{padding-block:0}::-webkit-calendar-picker-indicator{line-height:1}:-moz-ui-invalid{box-shadow:none}button,input:where([type=button],[type=reset],[type=submit]){appearance:button}::file-selector-button{appearance:button}::-webkit-inner-spin-button{height:auto}::-webkit-outer-spin-button{height:auto}[hidden]:where(:not([hidden=until-found])){display:none!important}}@layer components;@layer utilities{.absolute{position:absolute}.fixed{position:fixed}.relative{position:relative}.static{position:static}.inset-0{inset:calc(var(--spacing) * 0)}.start{inset-inline-start:var(--spacing)}.top-0{top:calc(var(--spacing) * 0)}.right-0{right:calc(var(--spacing) * 0)}.container{width:100%}@media(min-width:40rem){.container{max-width:40rem}}@media(min-width:48rem){.container{max-width:48rem}}@media(min-width:64rem){.container{max-width:64rem}}@media(min-width:80rem){.container{max-width:80rem}}@media(min-width:96rem){.container{max-width:96rem}}.mx-auto{margin-inline:auto}.-mt-\[6\.6rem\]{margin-top:-6.6rem}.-mt-px{margin-top:-1px}.mt-2{margin-top:calc(var(--spacing) * 2)}.mt-4{margin-top:calc(var(--spacing) * 4)}.mt-6{margin-top:calc(var(--spacing) * 6)}.mt-8{margin-top:calc(var(--spacing) * 8)}.mr-2{margin-right:calc(var(--spacing) * 2)}.-mb-px{margin-bottom:-1px}.mb-1{margin-bottom:calc(var(--spacing) * 1)}.mb-2{margin-bottom:calc(var(--spacing) * 2)}.mb-4{margin-bottom:calc(var(--spacing) * 4)}.mb-6{margin-bottom:calc(var(--spacing) * 6)}.-ml-8{margin-left:calc(var(--spacing) * -8)}.-ml-px{margin-left:-1px}.ml-1{margin-left:calc(var(--spacing) * 1)}.ml-2{margin-left:calc(var(--spacing) * 2)}.ml-4{margin-left:calc(var(--spacing) * 4)}.ml-12{margin-left:calc(var(--spacing) * 12)}.contents{display:contents}.flex{display:flex}.grid{display:grid}.hidden{display:none}.inline-block{display:inline-block}.inline-flex{display:inline-flex}.table{display:table}.aspect-\[335\/364\]{aspect-ratio:335/364}.h-1{height:calc(var(--spacing) * 1)}.h-1\.5{height:calc(var(--spacing) * 1.5)}.h-2{height:calc(var(--spacing) * 2)}.h-2\.5{height:calc(var(--spacing) * 2.5)}.h-3{height:calc(var(--spacing) * 3)}.h-3\.5{height:calc(var(--spacing) * 3.5)}.h-5{height:calc(var(--spacing) * 5)}.h-8{height:calc(var(--spacing) * 8)}.h-14{height:calc(var(--spacing) * 14)}.h-14\.5{height:calc(var(--spacing) * 14.5)}.h-16{height:calc(var(--spacing) * 16)}.min-h-screen{min-height:100vh}.w-1{width:calc(var(--spacing) * 1)}.w-1\.5{width:calc(var(--spacing) * 1.5)}.w-2{width:calc(var(--spacing) * 2)}.w-2\.5{width:calc(var(--spacing) * 2.5)}.w-3{width:calc(var(--spacing) * 3)}.w-3\.5{width:calc(var(--spacing) * 3.5)}.w-5{width:calc(var(--spacing) * 5)}.w-8{width:calc(var(--spacing) * 8)}.w-\[438px\]{width:438px}.w-auto{width:auto}.w-full{width:100%}.max-w-6xl{max-width:var(--container-6xl)}.max-w-\[335px\]{max-width:335px}.max-w-none{max-width:none}.max-w-xl{max-width:var(--container-xl)}.flex-1{flex:1}.shrink-0{flex-shrink:0}.translate-y-0{--tw-translate-y:calc(var(--spacing) * 0);translate:var(--tw-translate-x) var(--tw-translate-y)}.transform{transform:var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,)}.cursor-default{cursor:default}.cursor-not-allowed{cursor:not-allowed}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.flex-col{flex-direction:column}.flex-col-reverse{flex-direction:column-reverse}.items-center{align-items:center}.justify-between{justify-content:space-between}.justify-center{justify-content:center}.justify-end{justify-content:flex-end}.justify-items-center{justify-items:center}.gap-2{gap:calc(var(--spacing) * 2)}.gap-3{gap:calc(var(--spacing) * 3)}.gap-4{gap:calc(var(--spacing) * 4)}:where(.space-x-1>:not(:last-child)){--tw-space-x-reverse:0;margin-inline-start:calc(calc(var(--spacing) * 1) * var(--tw-space-x-reverse));margin-inline-end:calc(calc(var(--spacing) * 1) * calc(1 - var(--tw-space-x-reverse)))}.overflow-hidden{overflow:hidden}.rounded-full{border-radius:3.40282e38px}.rounded-md{border-radius:var(--radius-md)}.rounded-sm{border-radius:var(--radius-sm)}.rounded-t-lg{border-top-left-radius:var(--radius-lg);border-top-right-radius:var(--radius-lg)}.rounded-l-md{border-top-left-radius:var(--radius-md);border-bottom-left-radius:var(--radius-md)}.rounded-r-md{border-top-right-radius:var(--radius-md);border-bottom-right-radius:var(--radius-md)}.rounded-br-lg{border-bottom-right-radius:var(--radius-lg)}.rounded-bl-lg{border-bottom-left-radius:var(--radius-lg)}.border{border-style:var(--tw-border-style);border-width:1px}.border-t{border-top-style:var(--tw-border-style);border-top-width:1px}.border-r{border-right-style:var(--tw-border-style);border-right-width:1px}.border-\[\#19140035\]{border-color:#19140035}.border-\[\#e3e3e0\]{border-color:#e3e3e0}.border-black{border-color:var(--color-black)}.border-gray-200{border-color:var(--color-gray-200)}.border-gray-300{border-color:var(--color-gray-300)}.border-gray-400{border-color:var(--color-gray-400)}.border-transparent{border-color:#0000}.bg-\[\#1b1b18\]{background-color:#1b1b18}.bg-\[\#FDFDFC\]{background-color:#fdfdfc}.bg-\[\#dbdbd7\]{background-color:#dbdbd7}.bg-\[\#fff2f2\]{background-color:#fff2f2}.bg-gray-100{background-color:var(--color-gray-100)}.bg-gray-200{background-color:var(--color-gray-200)}.bg-white{background-color:var(--color-white)}.p-6{padding:calc(var(--spacing) * 6)}.px-2{padding-inline:calc(var(--spacing) * 2)}.px-4{padding-inline:calc(var(--spacing) * 4)}.px-5{padding-inline:calc(var(--spacing) * 5)}.px-6{padding-inline:calc(var(--spacing) * 6)}.py-1{padding-block:calc(var(--spacing) * 1)}.py-1\.5{padding-block:calc(var(--spacing) * 1.5)}.py-2{padding-block:calc(var(--spacing) * 2)}.py-4{padding-block:calc(var(--spacing) * 4)}.pt-8{padding-top:calc(var(--spacing) * 8)}.pb-6{padding-bottom:calc(var(--spacing) * 6)}.pb-12{padding-bottom:calc(var(--spacing) * 12)}.text-center{text-align:center}.text-lg{font-size:var(--text-lg);line-height:var(--tw-leading,var(--text-lg--line-height))}.text-sm{font-size:var(--text-sm);line-height:var(--tw-leading,var(--text-sm--line-height))}.text-\[13px\]{font-size:13px}.leading-5{--tw-leading:calc(var(--spacing) * 5);line-height:calc(var(--spacing) * 5)}.leading-7{--tw-leading:calc(var(--spacing) * 7);line-height:calc(var(--spacing) * 7)}.leading-\[20px\]{--tw-leading:20px;line-height:20px}.leading-normal{--tw-leading:var(--leading-normal);line-height:var(--leading-normal)}.font-medium{--tw-font-weight:var(--font-weight-medium);font-weight:var(--font-weight-medium)}.font-semibold{--tw-font-weight:var(--font-weight-semibold);font-weight:var(--font-weight-semibold)}.tracking-wider{--tw-tracking:var(--tracking-wider);letter-spacing:var(--tracking-wider)}.text-\[\#1B1B18\],.text-\[\#1b1b18\]{color:#1b1b18}.text-\[\#706f6c\]{color:#706f6c}.text-\[\#F3BEC7\]{color:#f3bec7}.text-\[\#F8B803\]{color:#f8b803}.text-\[\#F53003\],.text-\[\#f53003\]{color:#f53003}.text-gray-200{color:var(--color-gray-200)}.text-gray-300{color:var(--color-gray-300)}.text-gray-400{color:var(--color-gray-400)}.text-gray-500{color:var(--color-gray-500)}.text-gray-600{color:var(--color-gray-600)}.text-gray-700{color:var(--color-gray-700)}.text-gray-800{color:var(--color-gray-800)}.text-gray-900{color:var(--color-gray-900)}.text-white{color:var(--color-white)}.uppercase{text-transform:uppercase}.underline{text-decoration-line:underline}.underline-offset-4{text-underline-offset:4px}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.opacity-100{opacity:1}.mix-blend-color{mix-blend-mode:color}.mix-blend-darken{mix-blend-mode:darken}.mix-blend-hard-light{mix-blend-mode:hard-light}.mix-blend-multiply{mix-blend-mode:multiply}.shadow{--tw-shadow:0 1px 3px 0 var(--tw-shadow-color,#0000001a), 0 1px 2px -1px var(--tw-shadow-color,#0000001a);box-shadow:var(--tw-inset-shadow),var(--tw-inset-ring-shadow),var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow)}.shadow-\[0px_0px_1px_0px_rgba\(0\,0\,0\,0\.03\)\,0px_1px_2px_0px_rgba\(0\,0\,0\,0\.06\)\]{--tw-shadow:0px 0px 1px 0px var(--tw-shadow-color,#00000008), 0px 1px 2px 0px var(--tw-shadow-color,#0000000f);box-shadow:var(--tw-inset-shadow),var(--tw-inset-ring-shadow),var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow)}.shadow-\[inset_0px_0px_0px_1px_rgba\(26\,26\,0\,0\.16\)\]{--tw-shadow:inset 0px 0px 0px 1px var(--tw-shadow-color,#1a1a0029);box-shadow:var(--tw-inset-shadow),var(--tw-inset-ring-shadow),var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 3px 0 var(--tw-shadow-color,#0000001a), 0 1px 2px -1px var(--tw-shadow-color,#0000001a);box-shadow:var(--tw-inset-shadow),var(--tw-inset-ring-shadow),var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow)}.ring-gray-300{--tw-ring-color:var(--color-gray-300)}.filter{filter:var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,)}.transition{transition-property:color,background-color,border-color,outline-color,text-decoration-color,fill,stroke,--tw-gradient-from,--tw-gradient-via,--tw-gradient-to,opacity,box-shadow,transform,translate,scale,rotate,filter,-webkit-backdrop-filter,backdrop-filter,display,content-visibility,overlay,pointer-events;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-all{transition-property:all;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-opacity{transition-property:opacity;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.delay-200{transition-delay:.2s}.delay-300{transition-delay:.3s}.delay-400{transition-delay:.4s}.duration-150{--tw-duration:.15s;transition-duration:.15s}.duration-750{--tw-duration:.75s;transition-duration:.75s}.ease-in-out{--tw-ease:var(--ease-in-out);transition-timing-function:var(--ease-in-out)}.\[--stroke-color\:\#1B1B18\]{--stroke-color:#1b1b18}.not-has-\[nav\]\:hidden:not(:has(:is(nav))){display:none}.before\:absolute:before{content:var(--tw-content);position:absolute}.before\:top-0:before{content:var(--tw-content);top:calc(var(--spacing) * 0)}.before\:top-1\/2:before{content:var(--tw-content);top:50%}.before\:bottom-0:before{content:var(--tw-content);bottom:calc(var(--spacing) * 0)}.before\:bottom-1\/2:before{content:var(--tw-content);bottom:50%}.before\:left-\[0\.4rem\]:before{content:var(--tw-content);left:.4rem}.before\:border-l:before{content:var(--tw-content);border-left-style:var(--tw-border-style);border-left-width:1px}.before\:border-\[\#e3e3e0\]:before{content:var(--tw-content);border-color:#e3e3e0}@media(hover:hover){.hover\:border-\[\#1915014a\]:hover{border-color:#1915014a}.hover\:border-\[\#19140035\]:hover{border-color:#19140035}.hover\:border-black:hover{border-color:var(--color-black)}.hover\:bg-black:hover{background-color:var(--color-black)}.hover\:bg-gray-100:hover{background-color:var(--color-gray-100)}.hover\:text-gray-400:hover{color:var(--color-gray-400)}.hover\:text-gray-700:hover{color:var(--color-gray-700)}}.focus\:border-blue-300:focus{border-color:var(--color-blue-300)}.focus\:ring:focus{--tw-ring-shadow:var(--tw-ring-inset,) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color,currentcolor);box-shadow:var(--tw-inset-shadow),var(--tw-inset-ring-shadow),var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow)}.focus\:outline-none:focus{--tw-outline-style:none;outline-style:none}.active\:bg-gray-100:active{background-color:var(--color-gray-100)}.active\:text-gray-500:active{color:var(--color-gray-500)}.active\:text-gray-700:active{color:var(--color-gray-700)}.active\:text-gray-800:active{color:var(--color-gray-800)}@media(min-width:40rem){.sm\:flex{display:flex}.sm\:hidden{display:none}.sm\:flex-1{flex:1}.sm\:items-center{align-items:center}.sm\:justify-between{justify-content:space-between}.sm\:justify-start{justify-content:flex-start}.sm\:gap-2{gap:calc(var(--spacing) * 2)}.sm\:px-6{padding-inline:calc(var(--spacing) * 6)}.sm\:pt-0{padding-top:calc(var(--spacing) * 0)}}@media(min-width:64rem){.lg\:mt-10{margin-top:calc(var(--spacing) * 10)}.lg\:mb-0{margin-bottom:calc(var(--spacing) * 0)}.lg\:mb-6{margin-bottom:calc(var(--spacing) * 6)}.lg\:-ml-px{margin-left:-1px}.lg\:ml-0{margin-left:calc(var(--spacing) * 0)}.lg\:block{display:block}.lg\:aspect-auto{aspect-ratio:auto}.lg\:w-\[438px\]{width:438px}.lg\:max-w-4xl{max-width:var(--container-4xl)}.lg\:grow{flex-grow:1}.lg\:flex-row{flex-direction:row}.lg\:justify-center{justify-content:center}.lg\:rounded-t-none{border-top-left-radius:0;border-top-right-radius:0}.lg\:rounded-tl-lg{border-top-left-radius:var(--radius-lg)}.lg\:rounded-r-lg{border-top-right-radius:var(--radius-lg);border-bottom-right-radius:var(--radius-lg)}.lg\:rounded-br-none{border-bottom-right-radius:0}.lg\:p-8{padding:calc(var(--spacing) * 8)}.lg\:p-20{padding:calc(var(--spacing) * 20)}.lg\:px-8{padding-inline:calc(var(--spacing) * 8)}.lg\:pb-10{padding-bottom:calc(var(--spacing) * 10)}}.rtl\:flex-row-reverse:where(:dir(rtl),[dir=rtl],[dir=rtl] *){flex-direction:row-reverse}@media(prefers-color-scheme:dark){.dark\:border-\[\#3E3E3A\]{border-color:#3e3e3a}.dark\:border-\[\#eeeeec\]{border-color:#eeeeec}.dark\:border-gray-600{border-color:var(--color-gray-600)}.dark\:bg-\[\#0a0a0a\]{background-color:#0a0a0a}.dark\:bg-\[\#1D0002\]{background-color:#1d0002}.dark\:bg-\[\#3E3E3A\]{background-color:#3e3e3a}.dark\:bg-\[\#161615\]{background-color:#161615}.dark\:bg-\[\#eeeeec\]{background-color:#eeeeec}.dark\:bg-gray-700{background-color:var(--color-gray-700)}.dark\:bg-gray-800{background-color:var(--color-gray-800)}.dark\:bg-gray-900{background-color:var(--color-gray-900)}.dark\:text-\[\#1C1C1A\]{color:#1c1c1a}.dark\:text-\[\#4B0600\]{color:#4b0600}.dark\:text-\[\#391800\]{color:#391800}.dark\:text-\[\#733000\]{color:#733000}.dark\:text-\[\#A1A09A\]{color:#a1a09a}.dark\:text-\[\#EDEDEC\]{color:#ededec}.dark\:text-\[\#F61500\]{color:#f61500}.dark\:text-\[\#FF4433\]{color:#f43}.dark\:text-black{color:var(--color-black)}.dark\:text-gray-200{color:var(--color-gray-200)}.dark\:text-gray-300{color:var(--color-gray-300)}.dark\:text-gray-400{color:var(--color-gray-400)}.dark\:text-gray-600{color:var(--color-gray-600)}.dark\:mix-blend-hard-light{mix-blend-mode:hard-light}.dark\:mix-blend-normal{mix-blend-mode:normal}.dark\:shadow-\[inset_0px_0px_0px_1px_\#fffaed2d\]{--tw-shadow:inset 0px 0px 0px 1px var(--tw-shadow-color,#fffaed2d);box-shadow:var(--tw-inset-shadow),var(--tw-inset-ring-shadow),var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow)}.dark\:\[--stroke-color\:\#FF750F\]{--stroke-color:#ff750f}.dark\:before\:border-\[\#3E3E3A\]:before{content:var(--tw-content);border-color:#3e3e3a}@media(hover:hover){.dark\:hover\:border-\[\#3E3E3A\]:hover{border-color:#3e3e3a}.dark\:hover\:border-\[\#62605b\]:hover{border-color:#62605b}.dark\:hover\:border-white:hover{border-color:var(--color-white)}.dark\:hover\:bg-gray-900:hover{background-color:var(--color-gray-900)}.dark\:hover\:bg-white:hover{background-color:var(--color-white)}.dark\:hover\:text-gray-200:hover{color:var(--color-gray-200)}.dark\:hover\:text-gray-300:hover{color:var(--color-gray-300)}}.dark\:focus\:border-blue-700:focus{border-color:var(--color-blue-700)}.dark\:focus\:border-blue-800:focus{border-color:var(--color-blue-800)}.dark\:active\:bg-gray-700:active{background-color:var(--color-gray-700)}.dark\:active\:text-gray-300:active{color:var(--color-gray-300)}}@starting-style{.starting\:opacity-0{opacity:0}}@media(prefers-reduced-motion:no-preference){@starting-style{.motion-safe\:starting\:-translate-x-\[26px\]{--tw-translate-x: -26px ;translate:var(--tw-translate-x) var(--tw-translate-y)}}@starting-style{.motion-safe\:starting\:-translate-x-\[51px\]{--tw-translate-x: -51px ;translate:var(--tw-translate-x) var(--tw-translate-y)}}@starting-style{.motion-safe\:starting\:-translate-x-\[78px\]{--tw-translate-x: -78px ;translate:var(--tw-translate-x) var(--tw-translate-y)}}@starting-style{.motion-safe\:starting\:-translate-x-\[102px\]{--tw-translate-x: -102px ;translate:var(--tw-translate-x) var(--tw-translate-y)}}@starting-style{.motion-safe\:starting\:translate-y-6{--tw-translate-y:calc(var(--spacing) * 6);translate:var(--tw-translate-x) var(--tw-translate-y)}}}}@property --tw-translate-x{syntax:"*";inherits:false;initial-value:0}@property --tw-translate-y{syntax:"*";inherits:false;initial-value:0}@property --tw-translate-z{syntax:"*";inherits:false;initial-value:0}@property --tw-rotate-x{syntax:"*";inherits:false}@property --tw-rotate-y{syntax:"*";inherits:false}@property --tw-rotate-z{syntax:"*";inherits:false}@property --tw-skew-x{syntax:"*";inherits:false}@property --tw-skew-y{syntax:"*";inherits:false}@property --tw-space-x-reverse{syntax:"*";inherits:false;initial-value:0}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}@property --tw-leading{syntax:"*";inherits:false}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-tracking{syntax:"*";inherits:false}@property --tw-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-shadow-color{syntax:"*";inherits:false}@property --tw-shadow-alpha{syntax:"<percentage>";inherits:false;initial-value:100%}@property --tw-inset-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-inset-shadow-color{syntax:"*";inherits:false}@property --tw-inset-shadow-alpha{syntax:"<percentage>";inherits:false;initial-value:100%}@property --tw-ring-color{syntax:"*";inherits:false}@property --tw-ring-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-inset-ring-color{syntax:"*";inherits:false}@property --tw-inset-ring-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-ring-inset{syntax:"*";inherits:false}@property --tw-ring-offset-width{syntax:"<length>";inherits:false;initial-value:0}@property --tw-ring-offset-color{syntax:"*";inherits:false;initial-value:#fff}@property --tw-ring-offset-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-blur{syntax:"*";inherits:false}@property --tw-brightness{syntax:"*";inherits:false}@property --tw-contrast{syntax:"*";inherits:false}@property --tw-grayscale{syntax:"*";inherits:false}@property --tw-hue-rotate{syntax:"*";inherits:false}@property --tw-invert{syntax:"*";inherits:false}@property --tw-opacity{syntax:"*";inherits:false}@property --tw-saturate{syntax:"*";inherits:false}@property --tw-sepia{syntax:"*";inherits:false}@property --tw-drop-shadow{syntax:"*";inherits:false}@property --tw-drop-shadow-color{syntax:"*";inherits:false}@property --tw-drop-shadow-alpha{syntax:"<percentage>";inherits:false;initial-value:100%}@property --tw-drop-shadow-size{syntax:"*";inherits:false}@property --tw-duration{syntax:"*";inherits:false}@property --tw-ease{syntax:"*";inherits:false}@property --tw-content{syntax:"*";inherits:false;initial-value:""}@keyframes spin{to{transform:rotate(360deg)}}@keyframes ping{75%,to{opacity:0;transform:scale(2)}}@keyframes pulse{50%{opacity:.5}}@keyframes bounce{0%,to{animation-timing-function:cubic-bezier(.8,0,1,1);transform:translateY(-25%)}50%{animation-timing-function:cubic-bezier(0,0,.2,1);transform:none}}
+              body {
+                font-family: 'Inter', sans-serif;
+                -webkit-tap-highlight-color: transparent;
+              }
+
+              .hide-scrollbar::-webkit-scrollbar {
+                display: none;
+              }
+
+              .hide-scrollbar {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+              }
+
+              .emergency-glow {
+                box-shadow: 0 0 20px rgba(232, 48, 42, 0.4);
+                animation: pulse-red 2s infinite;
+              }
+
+              @keyframes pulse-red {
+                0% {
+                  transform: scale(1);
+                  box-shadow: 0 0 0 0 rgba(232, 48, 42, 0.7);
+                }
+
+                70% {
+                  transform: scale(1.05);
+                  box-shadow: 0 0 0 15px rgba(232, 48, 42, 0);
+                }
+
+                100% {
+                  transform: scale(1);
+                  box-shadow: 0 0 0 0 rgba(232, 48, 42, 0);
+                }
+              }
             </style>
-        @endif
-    </head>
-    <body class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] flex p-6 lg:p-8 items-center lg:justify-center min-h-screen flex-col">
-        <header class="w-full lg:max-w-4xl max-w-[335px] text-sm mb-6 not-has-[nav]:hidden">
-            @if (Route::has('login'))
-                <nav class="flex items-center justify-end gap-4">
-                    @auth
-                        <a
-                            href="{{ url('/dashboard') }}"
-                            class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal"
-                        >
-                            Dashboard
-                        </a>
-                    @else
-                        <a
-                            href="{{ route('login') }}"
-                            class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] text-[#1b1b18] border border-transparent hover:border-[#19140035] dark:hover:border-[#3E3E3A] rounded-sm text-sm leading-normal"
-                        >
-                            Log in
-                        </a>
+            <style>
+              body {
+                min-height: max(884px, 100dvh);
+              }
+            </style>
+          </head>
 
-                        @if (Route::has('register'))
-                            <a
-                                href="{{ route('register') }}"
-                                class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal">
-                                Register
-                            </a>
-                        @endif
-                    @endauth
-                </nav>
-            @endif
-        </header>
-        <div class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
-            <main class="flex max-w-[335px] w-full flex-col-reverse lg:max-w-4xl lg:flex-row">
-                <div class="text-[13px] leading-[20px] flex-1 p-6 pb-6 lg:p-20 lg:pb-10 bg-white dark:bg-[#161615] dark:text-[#EDEDEC] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] rounded-bl-lg rounded-br-lg lg:rounded-tl-lg lg:rounded-br-none">
-                    <h1 class="mb-1 font-medium">Let's get started</h1>
-                    <p class="mb-2 text-[#706f6c] dark:text-[#A1A09A]">With so many options available to you,<br /> we suggest you start with the following:</p>
-                    <ul class="flex flex-col mb-4 lg:mb-6">
-                        <li class="flex items-center gap-4 py-2 relative before:border-l before:border-[#e3e3e0] dark:before:border-[#3E3E3A] before:top-1/2 before:bottom-0 before:left-[0.4rem] before:absolute">
-                            <span class="relative py-1 bg-white dark:bg-[#161615]">
-                                <span class="flex items-center justify-center rounded-full bg-[#FDFDFC] dark:bg-[#161615] shadow-[0px_0px_1px_0px_rgba(0,0,0,0.03),0px_1px_2px_0px_rgba(0,0,0,0.06)] w-3.5 h-3.5 border dark:border-[#3E3E3A] border-[#e3e3e0]">
-                                    <span class="rounded-full bg-[#dbdbd7] dark:bg-[#3E3E3A] w-1.5 h-1.5"></span>
-                                </span>
-                            </span>
-                            <span>
-                                Read the
-                                <a href="https://laravel.com/docs" target="_blank" class="inline-flex items-center space-x-1 font-medium underline underline-offset-4 text-[#f53003] dark:text-[#FF4433] ml-1">
-                                    <span>Documentation</span>
-                                    <svg
-                                        width="10"
-                                        height="11"
-                                        viewBox="0 0 10 11"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="w-2.5 h-2.5"
-                                    >
-                                        <path
-                                            d="M7.70833 6.95834V2.79167H3.54167M2.5 8L7.5 3.00001"
-                                            stroke="currentColor"
-                                            stroke-linecap="square"
-                                        />
-                                    </svg>
-                                </a>
-                            </span>
-                        </li>
-                        <li class="flex items-center gap-4 py-2 relative before:border-l before:border-[#e3e3e0] dark:before:border-[#3E3E3A] before:bottom-1/2 before:top-0 before:left-[0.4rem] before:absolute">
-                            <span class="relative py-1 bg-white dark:bg-[#161615]">
-                                <span class="flex items-center justify-center rounded-full bg-[#FDFDFC] dark:bg-[#161615] shadow-[0px_0px_1px_0px_rgba(0,0,0,0.03),0px_1px_2px_0px_rgba(0,0,0,0.06)] w-3.5 h-3.5 border dark:border-[#3E3E3A] border-[#e3e3e0]">
-                                    <span class="rounded-full bg-[#dbdbd7] dark:bg-[#3E3E3A] w-1.5 h-1.5"></span>
-                                </span>
-                            </span>
-                            <span>
-                                Watch video tutorials at
-                                <a href="https://laracasts.com" target="_blank" class="inline-flex items-center space-x-1 font-medium underline underline-offset-4 text-[#f53003] dark:text-[#FF4433] ml-1">
-                                    <span>Laracasts</span>
-                                    <svg
-                                        width="10"
-                                        height="11"
-                                        viewBox="0 0 10 11"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="w-2.5 h-2.5"
-                                    >
-                                        <path
-                                            d="M7.70833 6.95834V2.79167H3.54167M2.5 8L7.5 3.00001"
-                                            stroke="currentColor"
-                                            stroke-linecap="square"
-                                        />
-                                    </svg>
-                                </a>
-                            </span>
-                        </li>
-                    </ul>
-                    <ul class="flex gap-3 text-sm leading-normal">
-                        <li>
-                            <a href="https://cloud.laravel.com" target="_blank" class="inline-block dark:bg-[#eeeeec] dark:border-[#eeeeec] dark:text-[#1C1C1A] dark:hover:bg-white dark:hover:border-white hover:bg-black hover:border-black px-5 py-1.5 bg-[#1b1b18] rounded-sm border border-black text-white text-sm leading-normal">
-                                Deploy now
-                            </a>
-                        </li>
-                    </ul>
-
-                    <p class="mt-6 lg:mt-10 text-[#706f6c] dark:text-[#A1A09A]">
-                        v{{ app()->version() }}
-                        <a href="https://github.com/laravel/framework/blob/13.x/CHANGELOG.md" target="_blank" class="inline-flex items-center space-x-1 font-medium underline underline-offset-4 text-[#f53003] dark:text-[#FF4433] ml-1">
-                            <span>View changelog</span>
-                            <svg
-                                width="10"
-                                height="11"
-                                viewBox="0 0 10 11"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="w-2.5 h-2.5"
-                            >
-                                <path
-                                    d="M7.70833 6.95834V2.79167H3.54167M2.5 8L7.5 3.00001"
-                                    stroke="currentColor"
-                                    stroke-linecap="square"
-                                />
-                            </svg>
-                        </a>
-                    </p>
+          <body class="bg-surface text-on-surface min-h-screen">
+            <!-- TopAppBar -->
+            <header
+              class="bg-surface dark:bg-surface flex justify-between items-center px-margin-mobile h-tap-target-min w-full z-50 fixed top-0 left-0">
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-high border border-outline-variant">
+                  <img alt="User Profile Picture" class="w-full h-full object-cover"
+                    data-alt="A professional close-up headshot of a friendly man with a modern hairstyle in a bright, corporate setting. The lighting is soft and high-key, reflecting a light-mode UI aesthetic. The composition is clean and minimalist, focusing on reliability and professionalism within a high-end automotive app environment. The background is a blurred, pristine office space with accents of primary red."
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVRX-gK7qKHIEyqRVBGysWENmzfuFYKx-KT4Lzpjrs6aGcbjyhHTOKmJKTxGOYOT2yDvznbdh0xPEqfRlDHKecgs6dLN0d5xad29sfSZAArAkaPee2u_DVrQ-MDbZoClw6SmLtmodevpQPd5OTluK4RgqyvoqFFPoL7LBfr0-KBuTVYWBxfp4Ws7XMKlL6Wl0b_crxHd4EFD-wxxbH12QoZagEKRRHxccVUECwSXi5Akx31Ek-e-IShrwbZUXiVxCC-e7pxjMfGIU" />
                 </div>
-                <div class="bg-[#fff2f2] dark:bg-[#1D0002] relative lg:-ml-px -mb-px lg:mb-0 rounded-t-lg lg:rounded-t-none lg:rounded-r-lg aspect-[335/364] lg:aspect-auto w-full lg:w-[438px] shrink-0 overflow-hidden">
-                    {{-- Laravel Logo --}}
-                    <svg class="w-full text-[#F53003] dark:text-[#F61500] transition-all translate-y-0 opacity-100 max-w-none duration-750 starting:opacity-0 motion-safe:starting:translate-y-6" viewBox="0 0 438 104" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M17.2036 -3H0V102.197H49.5189V86.7187H17.2036V-3Z" fill="currentColor" />
-                        <path d="M110.256 41.6337C108.061 38.1275 104.945 35.3731 100.905 33.3681C96.8667 31.3647 92.8016 30.3618 88.7131 30.3618C83.4247 30.3618 78.5885 31.3389 74.201 33.2923C69.8111 35.2456 66.0474 37.928 62.9059 41.3333C59.7643 44.7401 57.3198 48.6726 55.5754 53.1293C53.8287 57.589 52.9572 62.274 52.9572 67.1813C52.9572 72.1925 53.8287 76.8995 55.5754 81.3069C57.3191 85.7173 59.7636 89.6241 62.9059 93.0293C66.0474 96.4361 69.8119 99.1155 74.201 101.069C78.5885 103.022 83.4247 103.999 88.7131 103.999C92.8016 103.999 96.8667 102.997 100.905 100.994C104.945 98.9911 108.061 96.2359 110.256 92.7282V102.195H126.563V32.1642H110.256V41.6337ZM108.76 75.7472C107.762 78.4531 106.366 80.8078 104.572 82.8112C102.776 84.8161 100.606 86.4183 98.0637 87.6206C95.5202 88.823 92.7004 89.4238 89.6103 89.4238C86.5178 89.4238 83.7252 88.823 81.2324 87.6206C78.7388 86.4183 76.5949 84.8161 74.7998 82.8112C73.004 80.8078 71.6319 78.4531 70.6856 75.7472C69.7356 73.0421 69.2644 70.1868 69.2644 67.1821C69.2644 64.1758 69.7356 61.3205 70.6856 58.6154C71.6319 55.9102 73.004 53.5571 74.7998 51.5522C76.5949 49.5495 78.738 47.9451 81.2324 46.7427C83.7252 45.5404 86.5178 44.9396 89.6103 44.9396C92.7012 44.9396 95.5202 45.5404 98.0637 46.7427C100.606 47.9451 102.776 49.5487 104.572 51.5522C106.367 53.5571 107.762 55.9102 108.76 58.6154C109.756 61.3205 110.256 64.1758 110.256 67.1821C110.256 70.1868 109.756 73.0421 108.76 75.7472Z" fill="currentColor" />
-                        <path d="M242.805 41.6337C240.611 38.1275 237.494 35.3731 233.455 33.3681C229.416 31.3647 225.351 30.3618 221.262 30.3618C215.974 30.3618 211.138 31.3389 206.75 33.2923C202.36 35.2456 198.597 37.928 195.455 41.3333C192.314 44.7401 189.869 48.6726 188.125 53.1293C186.378 57.589 185.507 62.274 185.507 67.1813C185.507 72.1925 186.378 76.8995 188.125 81.3069C189.868 85.7173 192.313 89.6241 195.455 93.0293C198.597 96.4361 202.361 99.1155 206.75 101.069C211.138 103.022 215.974 103.999 221.262 103.999C225.351 103.999 229.416 102.997 233.455 100.994C237.494 98.9911 240.611 96.2359 242.805 92.7282V102.195H259.112V32.1642H242.805V41.6337ZM241.31 75.7472C240.312 78.4531 238.916 80.8078 237.122 82.8112C235.326 84.8161 233.156 86.4183 230.614 87.6206C228.07 88.823 225.251 89.4238 222.16 89.4238C219.068 89.4238 216.275 88.823 213.782 87.6206C211.289 86.4183 209.145 84.8161 207.35 82.8112C205.554 80.8078 204.182 78.4531 203.236 75.7472C202.286 73.0421 201.814 70.1868 201.814 67.1821C201.814 64.1758 202.286 61.3205 203.236 58.6154C204.182 55.9102 205.554 53.5571 207.35 51.5522C209.145 49.5495 211.288 47.9451 213.782 46.7427C216.275 45.5404 219.068 44.9396 222.16 44.9396C225.251 44.9396 228.07 45.5404 230.614 46.7427C233.156 47.9451 235.326 49.5487 237.122 51.5522C238.917 53.5571 240.312 55.9102 241.31 58.6154C242.306 61.3205 242.806 64.1758 242.806 67.1821C242.805 70.1868 242.305 73.0421 241.31 75.7472Z" fill="currentColor" />
-                        <path d="M438 -3H421.694V102.197H438V-3Z" fill="currentColor" />
-                        <path d="M139.43 102.197H155.735V48.2834H183.712V32.1665H139.43V102.197Z" fill="currentColor" />
-                        <path d="M324.49 32.1665L303.995 85.794L283.498 32.1665H266.983L293.748 102.197H314.242L341.006 32.1665H324.49Z" fill="currentColor" />
-                        <path d="M376.571 30.3656C356.603 30.3656 340.797 46.8497 340.797 67.1828C340.797 89.6597 356.094 104 378.661 104C391.29 104 399.354 99.1488 409.206 88.5848L398.189 80.0226C398.183 80.031 389.874 90.9895 377.468 90.9895C363.048 90.9895 356.977 79.3111 356.977 73.269H411.075C413.917 50.1328 398.775 30.3656 376.571 30.3656ZM357.02 61.0967C357.145 59.7487 359.023 43.3761 376.442 43.3761C393.861 43.3761 395.978 59.7464 396.099 61.0967H357.02Z" fill="currentColor" />
-                    </svg>
-
-                    {{-- 13 --}}
-                    <svg class="w-[438px] max-w-none relative -mt-[6.6rem] -ml-8 lg:ml-0 [--stroke-color:#1B1B18] dark:[--stroke-color:#FF750F]" viewBox="0 0 440 392" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <g class="mix-blend-darken dark:mix-blend-normal transition-all delay-300 opacity-100 duration-750 starting:opacity-0 text-[#1B1B18] dark:text-black">
-                            <mask id="path-1-mask" maskUnits="userSpaceOnUse" x="-0.328613" y="103" width="338" height="299" fill="black">
-                                <rect fill="white" x="-0.328613" y="103" width="338" height="299"/>
-                                <path d="M234.936 400.8C204.136 400.8 178.936 392.4 159.336 375.6C140.136 358.8 130.536 337 130.536 310.2H200.736C200.736 318.2 203.736 324.8 209.736 330C215.736 335.2 223.736 337.8 233.736 337.8C243.336 337.8 251.136 335 257.136 329.4C263.536 323.8 266.736 316.6 266.736 307.8C266.736 299.8 263.936 293.2 258.336 288C252.736 282.8 245.536 280.2 236.736 280.2H199.536V218.4H236.736C243.536 218.4 249.336 216 254.136 211.2C258.936 206.4 261.336 200.4 261.336 193.2C261.336 184.8 258.736 178.2 253.536 173.4C248.336 168.6 241.736 166.2 233.736 166.2C226.536 166.2 220.336 168.4 215.136 172.8C210.336 177.2 207.936 182.8 207.936 189.6H141.336C141.336 164.8 150.136 144.6 167.736 129C185.336 113 207.936 105 235.536 105C263.136 105 285.536 112.2 302.736 126.6C320.336 141 329.136 160 329.136 183.6C329.136 200.8 324.536 214.8 315.336 225.6C306.136 236 294.336 243.2 279.936 247.2C297.136 252 310.736 260.2 320.736 271.8C331.136 283.4 336.336 298 336.336 315.6C336.336 340.4 326.936 360.8 308.136 376.8C289.336 392.8 264.936 400.8 234.936 400.8Z"/>
-                                <path d="M26.8714 167.6H1.67139V105.2H94.6714V400.2H26.8714V167.6Z"/>
-                            </mask>
-                            <path d="M234.936 400.8C204.136 400.8 178.936 392.4 159.336 375.6C140.136 358.8 130.536 337 130.536 310.2H200.736C200.736 318.2 203.736 324.8 209.736 330C215.736 335.2 223.736 337.8 233.736 337.8C243.336 337.8 251.136 335 257.136 329.4C263.536 323.8 266.736 316.6 266.736 307.8C266.736 299.8 263.936 293.2 258.336 288C252.736 282.8 245.536 280.2 236.736 280.2H199.536V218.4H236.736C243.536 218.4 249.336 216 254.136 211.2C258.936 206.4 261.336 200.4 261.336 193.2C261.336 184.8 258.736 178.2 253.536 173.4C248.336 168.6 241.736 166.2 233.736 166.2C226.536 166.2 220.336 168.4 215.136 172.8C210.336 177.2 207.936 182.8 207.936 189.6H141.336C141.336 164.8 150.136 144.6 167.736 129C185.336 113 207.936 105 235.536 105C263.136 105 285.536 112.2 302.736 126.6C320.336 141 329.136 160 329.136 183.6C329.136 200.8 324.536 214.8 315.336 225.6C306.136 236 294.336 243.2 279.936 247.2C297.136 252 310.736 260.2 320.736 271.8C331.136 283.4 336.336 298 336.336 315.6C336.336 340.4 326.936 360.8 308.136 376.8C289.336 392.8 264.936 400.8 234.936 400.8Z" fill="currentColor"/>
-                            <path d="M26.8714 167.6H1.67139V105.2H94.6714V400.2H26.8714V167.6Z" fill="currentColor"/>
-                            <path d="M234.936 400.8C204.136 400.8 178.936 392.4 159.336 375.6C140.136 358.8 130.536 337 130.536 310.2H200.736C200.736 318.2 203.736 324.8 209.736 330C215.736 335.2 223.736 337.8 233.736 337.8C243.336 337.8 251.136 335 257.136 329.4C263.536 323.8 266.736 316.6 266.736 307.8C266.736 299.8 263.936 293.2 258.336 288C252.736 282.8 245.536 280.2 236.736 280.2H199.536V218.4H236.736C243.536 218.4 249.336 216 254.136 211.2C258.936 206.4 261.336 200.4 261.336 193.2C261.336 184.8 258.736 178.2 253.536 173.4C248.336 168.6 241.736 166.2 233.736 166.2C226.536 166.2 220.336 168.4 215.136 172.8C210.336 177.2 207.936 182.8 207.936 189.6H141.336C141.336 164.8 150.136 144.6 167.736 129C185.336 113 207.936 105 235.536 105C263.136 105 285.536 112.2 302.736 126.6C320.336 141 329.136 160 329.136 183.6C329.136 200.8 324.536 214.8 315.336 225.6C306.136 236 294.336 243.2 279.936 247.2C297.136 252 310.736 260.2 320.736 271.8C331.136 283.4 336.336 298 336.336 315.6C336.336 340.4 326.936 360.8 308.136 376.8C289.336 392.8 264.936 400.8 234.936 400.8Z" stroke="var(--stroke-color)" stroke-width="2.4" mask="url(#path-1-mask)"/>
-                            <path d="M26.8714 167.6H1.67139V105.2H94.6714V400.2H26.8714V167.6Z" stroke="var(--stroke-color)" stroke-width="2.4" mask="url(#path-1-mask)"/>
-                        </g>
-
-                        <g class="transition-all delay-400 opacity-100 duration-750 starting:opacity-0 motion-safe:starting:-translate-x-[26px] text-[#F3BEC7] dark:text-[#4B0600]">
-                            <mask id="path-2-mask" maskUnits="userSpaceOnUse" x="25.3357" y="103" width="338" height="299" fill="black">
-                                <rect fill="white" x="25.3357" y="103" width="338" height="299"/>
-                                <path d="M260.6 400.8C229.8 400.8 204.6 392.4 185 375.6C165.8 358.8 156.2 337 156.2 310.2H226.4C226.4 318.2 229.4 324.8 235.4 330C241.4 335.2 249.4 337.8 259.4 337.8C269 337.8 276.8 335 282.8 329.4C289.2 323.8 292.4 316.6 292.4 307.8C292.4 299.8 289.6 293.2 284 288C278.4 282.8 271.2 280.2 262.4 280.2H225.2V218.4H262.4C269.2 218.4 275 216 279.8 211.2C284.6 206.4 287 200.4 287 193.2C287 184.8 284.4 178.2 279.2 173.4C274 168.6 267.4 166.2 259.4 166.2C252.2 166.2 246 168.4 240.8 172.8C236 177.2 233.6 182.8 233.6 189.6H167C167 164.8 175.8 144.6 193.4 129C211 113 233.6 105 261.2 105C288.8 105 311.2 112.2 328.4 126.6C346 141 354.8 160 354.8 183.6C354.8 200.8 350.2 214.8 341 225.6C331.8 236 320 243.2 305.6 247.2C322.8 252 336.4 260.2 346.4 271.8C356.8 283.4 362 298 362 315.6C362 340.4 352.6 360.8 333.8 376.8C315 392.8 290.6 400.8 260.6 400.8Z"/>
-                                <path d="M52.5357 167.6H27.3357V105.2H120.336V400.2H52.5357V167.6Z"/>
-                            </mask>
-                            <path d="M260.6 400.8C229.8 400.8 204.6 392.4 185 375.6C165.8 358.8 156.2 337 156.2 310.2H226.4C226.4 318.2 229.4 324.8 235.4 330C241.4 335.2 249.4 337.8 259.4 337.8C269 337.8 276.8 335 282.8 329.4C289.2 323.8 292.4 316.6 292.4 307.8C292.4 299.8 289.6 293.2 284 288C278.4 282.8 271.2 280.2 262.4 280.2H225.2V218.4H262.4C269.2 218.4 275 216 279.8 211.2C284.6 206.4 287 200.4 287 193.2C287 184.8 284.4 178.2 279.2 173.4C274 168.6 267.4 166.2 259.4 166.2C252.2 166.2 246 168.4 240.8 172.8C236 177.2 233.6 182.8 233.6 189.6H167C167 164.8 175.8 144.6 193.4 129C211 113 233.6 105 261.2 105C288.8 105 311.2 112.2 328.4 126.6C346 141 354.8 160 354.8 183.6C354.8 200.8 350.2 214.8 341 225.6C331.8 236 320 243.2 305.6 247.2C322.8 252 336.4 260.2 346.4 271.8C356.8 283.4 362 298 362 315.6C362 340.4 352.6 360.8 333.8 376.8C315 392.8 290.6 400.8 260.6 400.8Z" fill="currentColor"/>
-                            <path d="M52.5357 167.6H27.3357V105.2H120.336V400.2H52.5357V167.6Z" fill="currentColor"/>
-                            <path d="M260.6 400.8C229.8 400.8 204.6 392.4 185 375.6C165.8 358.8 156.2 337 156.2 310.2H226.4C226.4 318.2 229.4 324.8 235.4 330C241.4 335.2 249.4 337.8 259.4 337.8C269 337.8 276.8 335 282.8 329.4C289.2 323.8 292.4 316.6 292.4 307.8C292.4 299.8 289.6 293.2 284 288C278.4 282.8 271.2 280.2 262.4 280.2H225.2V218.4H262.4C269.2 218.4 275 216 279.8 211.2C284.6 206.4 287 200.4 287 193.2C287 184.8 284.4 178.2 279.2 173.4C274 168.6 267.4 166.2 259.4 166.2C252.2 166.2 246 168.4 240.8 172.8C236 177.2 233.6 182.8 233.6 189.6H167C167 164.8 175.8 144.6 193.4 129C211 113 233.6 105 261.2 105C288.8 105 311.2 112.2 328.4 126.6C346 141 354.8 160 354.8 183.6C354.8 200.8 350.2 214.8 341 225.6C331.8 236 320 243.2 305.6 247.2C322.8 252 336.4 260.2 346.4 271.8C356.8 283.4 362 298 362 315.6C362 340.4 352.6 360.8 333.8 376.8C315 392.8 290.6 400.8 260.6 400.8Z" stroke="var(--stroke-color)" stroke-width="2.4" mask="url(#path-2-mask)"/>
-                            <path d="M52.5357 167.6H27.3357V105.2H120.336V400.2H52.5357V167.6Z" stroke="var(--stroke-color)" stroke-width="2.4" mask="url(#path-2-mask)"/>
-                        </g>
-                        
-                        <g class="mix-blend-color dark:mix-blend-hard-light transition-all delay-400 opacity-100 duration-750 starting:opacity-0 motion-safe:starting:-translate-x-[51px] text-[#F8B803] dark:text-[#391800]">
-                            <mask id="path-3-mask" maskUnits="userSpaceOnUse" x="51" y="103" width="338" height="299" fill="black">
-                                <rect fill="white" x="51" y="103" width="338" height="299"/>
-                                <path d="M286.264 400.8C255.464 400.8 230.264 392.4 210.664 375.6C191.464 358.8 181.864 337 181.864 310.2H252.064C252.064 318.2 255.064 324.8 261.064 330C267.064 335.2 275.064 337.8 285.064 337.8C294.664 337.8 302.464 335 308.464 329.4C314.864 323.8 318.064 316.6 318.064 307.8C318.064 299.8 315.264 293.2 309.664 288C304.064 282.8 296.864 280.2 288.064 280.2H250.864V218.4H288.064C294.864 218.4 300.664 216 305.464 211.2C310.264 206.4 312.664 200.4 312.664 193.2C312.664 184.8 310.064 178.2 304.864 173.4C299.664 168.6 293.064 166.2 285.064 166.2C277.864 166.2 271.664 168.4 266.464 172.8C261.664 177.2 259.264 182.8 259.264 189.6H192.664C192.664 164.8 201.464 144.6 219.064 129C236.664 113 259.264 105 286.864 105C314.464 105 336.864 112.2 354.064 126.6C371.664 141 380.464 160 380.464 183.6C380.464 200.8 375.864 214.8 366.664 225.6C357.464 236 345.664 243.2 331.264 247.2C348.464 252 362.064 260.2 372.064 271.8C382.464 283.4 387.664 298 387.664 315.6C387.664 340.4 378.264 360.8 359.464 376.8C340.664 392.8 316.264 400.8 286.264 400.8Z"/>
-                                <path d="M78.2 167.6H53V105.2H146V400.2H78.2V167.6Z"/>
-                            </mask>
-                            <path d="M286.264 400.8C255.464 400.8 230.264 392.4 210.664 375.6C191.464 358.8 181.864 337 181.864 310.2H252.064C252.064 318.2 255.064 324.8 261.064 330C267.064 335.2 275.064 337.8 285.064 337.8C294.664 337.8 302.464 335 308.464 329.4C314.864 323.8 318.064 316.6 318.064 307.8C318.064 299.8 315.264 293.2 309.664 288C304.064 282.8 296.864 280.2 288.064 280.2H250.864V218.4H288.064C294.864 218.4 300.664 216 305.464 211.2C310.264 206.4 312.664 200.4 312.664 193.2C312.664 184.8 310.064 178.2 304.864 173.4C299.664 168.6 293.064 166.2 285.064 166.2C277.864 166.2 271.664 168.4 266.464 172.8C261.664 177.2 259.264 182.8 259.264 189.6H192.664C192.664 164.8 201.464 144.6 219.064 129C236.664 113 259.264 105 286.864 105C314.464 105 336.864 112.2 354.064 126.6C371.664 141 380.464 160 380.464 183.6C380.464 200.8 375.864 214.8 366.664 225.6C357.464 236 345.664 243.2 331.264 247.2C348.464 252 362.064 260.2 372.064 271.8C382.464 283.4 387.664 298 387.664 315.6C387.664 340.4 378.264 360.8 359.464 376.8C340.664 392.8 316.264 400.8 286.264 400.8Z" fill="currentColor"/>
-                            <path d="M78.2 167.6H53V105.2H146V400.2H78.2V167.6Z" fill="currentColor"/>
-                            <path d="M286.264 400.8C255.464 400.8 230.264 392.4 210.664 375.6C191.464 358.8 181.864 337 181.864 310.2H252.064C252.064 318.2 255.064 324.8 261.064 330C267.064 335.2 275.064 337.8 285.064 337.8C294.664 337.8 302.464 335 308.464 329.4C314.864 323.8 318.064 316.6 318.064 307.8C318.064 299.8 315.264 293.2 309.664 288C304.064 282.8 296.864 280.2 288.064 280.2H250.864V218.4H288.064C294.864 218.4 300.664 216 305.464 211.2C310.264 206.4 312.664 200.4 312.664 193.2C312.664 184.8 310.064 178.2 304.864 173.4C299.664 168.6 293.064 166.2 285.064 166.2C277.864 166.2 271.664 168.4 266.464 172.8C261.664 177.2 259.264 182.8 259.264 189.6H192.664C192.664 164.8 201.464 144.6 219.064 129C236.664 113 259.264 105 286.864 105C314.464 105 336.864 112.2 354.064 126.6C371.664 141 380.464 160 380.464 183.6C380.464 200.8 375.864 214.8 366.664 225.6C357.464 236 345.664 243.2 331.264 247.2C348.464 252 362.064 260.2 372.064 271.8C382.464 283.4 387.664 298 387.664 315.6C387.664 340.4 378.264 360.8 359.464 376.8C340.664 392.8 316.264 400.8 286.264 400.8Z" stroke="var(--stroke-color)" stroke-width="2.4" mask="url(#path-3-mask)"/>
-                            <path d="M78.2 167.6H53V105.2H146V400.2H78.2V167.6Z" stroke="var(--stroke-color)" stroke-width="2.4" mask="url(#path-3-mask)"/>
-                        </g>
-                        
-                        <g class="mix-blend-multiply dark:mix-blend-normal transition-all delay-400 opacity-100 duration-750 starting:opacity-0 motion-safe:starting:-translate-x-[78px] text-[#F3BEC7] dark:text-[#733000]">
-                            <mask id="path-4-mask" maskUnits="userSpaceOnUse" x="76.6643" y="103" width="338" height="299" fill="black">
-                                <rect fill="white" x="76.6643" y="103" width="338" height="299"/>
-                                <path d="M311.929 400.8C281.129 400.8 255.929 392.4 236.329 375.6C217.129 358.8 207.529 337 207.529 310.2H277.729C277.729 318.2 280.729 324.8 286.729 330C292.729 335.2 300.729 337.8 310.729 337.8C320.329 337.8 328.129 335 334.129 329.4C340.529 323.8 343.729 316.6 343.729 307.8C343.729 299.8 340.929 293.2 335.329 288C329.729 282.8 322.529 280.2 313.729 280.2H276.529V218.4H313.729C320.529 218.4 326.329 216 331.129 211.2C335.929 206.4 338.329 200.4 338.329 193.2C338.329 184.8 335.729 178.2 330.529 173.4C325.329 168.6 318.729 166.2 310.729 166.2C303.529 166.2 297.329 168.4 292.129 172.8C287.329 177.2 284.929 182.8 284.929 189.6H218.329C218.329 164.8 227.129 144.6 244.729 129C262.329 113 284.929 105 312.529 105C340.129 105 362.529 112.2 379.729 126.6C397.329 141 406.129 160 406.129 183.6C406.129 200.8 401.529 214.8 392.329 225.6C383.129 236 371.329 243.2 356.929 247.2C374.129 252 387.729 260.2 397.729 271.8C408.129 283.4 413.329 298 413.329 315.6C413.329 340.4 403.929 360.8 385.129 376.8C366.329 392.8 341.929 400.8 311.929 400.8Z"/>
-                                <path d="M103.864 167.6H78.6643V105.2H171.664V400.2H103.864V167.6Z"/>
-                            </mask>
-                            <path d="M311.929 400.8C281.129 400.8 255.929 392.4 236.329 375.6C217.129 358.8 207.529 337 207.529 310.2H277.729C277.729 318.2 280.729 324.8 286.729 330C292.729 335.2 300.729 337.8 310.729 337.8C320.329 337.8 328.129 335 334.129 329.4C340.529 323.8 343.729 316.6 343.729 307.8C343.729 299.8 340.929 293.2 335.329 288C329.729 282.8 322.529 280.2 313.729 280.2H276.529V218.4H313.729C320.529 218.4 326.329 216 331.129 211.2C335.929 206.4 338.329 200.4 338.329 193.2C338.329 184.8 335.729 178.2 330.529 173.4C325.329 168.6 318.729 166.2 310.729 166.2C303.529 166.2 297.329 168.4 292.129 172.8C287.329 177.2 284.929 182.8 284.929 189.6H218.329C218.329 164.8 227.129 144.6 244.729 129C262.329 113 284.929 105 312.529 105C340.129 105 362.529 112.2 379.729 126.6C397.329 141 406.129 160 406.129 183.6C406.129 200.8 401.529 214.8 392.329 225.6C383.129 236 371.329 243.2 356.929 247.2C374.129 252 387.729 260.2 397.729 271.8C408.129 283.4 413.329 298 413.329 315.6C413.329 340.4 403.929 360.8 385.129 376.8C366.329 392.8 341.929 400.8 311.929 400.8Z" fill="currentColor"/>
-                            <path d="M103.864 167.6H78.6643V105.2H171.664V400.2H103.864V167.6Z" fill="currentColor"/>
-                            <path d="M311.929 400.8C281.129 400.8 255.929 392.4 236.329 375.6C217.129 358.8 207.529 337 207.529 310.2H277.729C277.729 318.2 280.729 324.8 286.729 330C292.729 335.2 300.729 337.8 310.729 337.8C320.329 337.8 328.129 335 334.129 329.4C340.529 323.8 343.729 316.6 343.729 307.8C343.729 299.8 340.929 293.2 335.329 288C329.729 282.8 322.529 280.2 313.729 280.2H276.529V218.4H313.729C320.529 218.4 326.329 216 331.129 211.2C335.929 206.4 338.329 200.4 338.329 193.2C338.329 184.8 335.729 178.2 330.529 173.4C325.329 168.6 318.729 166.2 310.729 166.2C303.529 166.2 297.329 168.4 292.129 172.8C287.329 177.2 284.929 182.8 284.929 189.6H218.329C218.329 164.8 227.129 144.6 244.729 129C262.329 113 284.929 105 312.529 105C340.129 105 362.529 112.2 379.729 126.6C397.329 141 406.129 160 406.129 183.6C406.129 200.8 401.529 214.8 392.329 225.6C383.129 236 371.329 243.2 356.929 247.2C374.129 252 387.729 260.2 397.729 271.8C408.129 283.4 413.329 298 413.329 315.6C413.329 340.4 403.929 360.8 385.129 376.8C366.329 392.8 341.929 400.8 311.929 400.8Z" stroke="var(--stroke-color)" stroke-width="2.4" mask="url(#path-4-mask)"/>
-                            <path d="M103.864 167.6H78.6643V105.2H171.664V400.2H103.864V167.6Z" stroke="var(--stroke-color)" stroke-width="2.4" mask="url(#path-4-mask)"/>
-                        </g>
-                        
-                        <g class="mix-blend-hard-light transition-all delay-400 opacity-100 duration-750 starting:opacity-0 motion-safe:starting:-translate-x-[102px] text-[#F3BEC7] dark:text-[#4B0600]">
-                            <mask id="path-5-mask" maskUnits="userSpaceOnUse" x="102.329" y="103" width="338" height="299" fill="black">
-                                <rect fill="white" x="102.329" y="103" width="338" height="299"/>
-                                <path d="M337.593 400.8C306.793 400.8 281.593 392.4 261.993 375.6C242.793 358.8 233.193 337 233.193 310.2H303.393C303.393 318.2 306.393 324.8 312.393 330C318.393 335.2 326.393 337.8 336.393 337.8C345.993 337.8 353.793 335 359.793 329.4C366.193 323.8 369.393 316.6 369.393 307.8C369.393 299.8 366.593 293.2 360.993 288C355.393 282.8 348.193 280.2 339.393 280.2H302.193V218.4H339.393C346.193 218.4 351.993 216 356.793 211.2C361.593 206.4 363.993 200.4 363.993 193.2C363.993 184.8 361.393 178.2 356.193 173.4C350.993 168.6 344.393 166.2 336.393 166.2C329.193 166.2 322.993 168.4 317.793 172.8C312.993 177.2 310.593 182.8 310.593 189.6H243.993C243.993 164.8 252.793 144.6 270.393 129C287.993 113 310.593 105 338.193 105C365.793 105 388.193 112.2 405.393 126.6C422.993 141 431.793 160 431.793 183.6C431.793 200.8 427.193 214.8 417.993 225.6C408.793 236 396.993 243.2 382.593 247.2C399.793 252 413.393 260.2 423.393 271.8C433.793 283.4 438.993 298 438.993 315.6C438.993 340.4 429.593 360.8 410.793 376.8C391.993 392.8 367.593 400.8 337.593 400.8Z"/>
-                                <path d="M129.529 167.6H104.329V105.2H197.329V400.2H129.529V167.6Z"/>
-                            </mask>
-                            <path d="M337.593 400.8C306.793 400.8 281.593 392.4 261.993 375.6C242.793 358.8 233.193 337 233.193 310.2H303.393C303.393 318.2 306.393 324.8 312.393 330C318.393 335.2 326.393 337.8 336.393 337.8C345.993 337.8 353.793 335 359.793 329.4C366.193 323.8 369.393 316.6 369.393 307.8C369.393 299.8 366.593 293.2 360.993 288C355.393 282.8 348.193 280.2 339.393 280.2H302.193V218.4H339.393C346.193 218.4 351.993 216 356.793 211.2C361.593 206.4 363.993 200.4 363.993 193.2C363.993 184.8 361.393 178.2 356.193 173.4C350.993 168.6 344.393 166.2 336.393 166.2C329.193 166.2 322.993 168.4 317.793 172.8C312.993 177.2 310.593 182.8 310.593 189.6H243.993C243.993 164.8 252.793 144.6 270.393 129C287.993 113 310.593 105 338.193 105C365.793 105 388.193 112.2 405.393 126.6C422.993 141 431.793 160 431.793 183.6C431.793 200.8 427.193 214.8 417.993 225.6C408.793 236 396.993 243.2 382.593 247.2C399.793 252 413.393 260.2 423.393 271.8C433.793 283.4 438.993 298 438.993 315.6C438.993 340.4 429.593 360.8 410.793 376.8C391.993 392.8 367.593 400.8 337.593 400.8Z" fill="currentColor"/>
-                            <path d="M129.529 167.6H104.329V105.2H197.329V400.2H129.529V167.6Z" fill="currentColor"/>
-                            <path d="M337.593 400.8C306.793 400.8 281.593 392.4 261.993 375.6C242.793 358.8 233.193 337 233.193 310.2H303.393C303.393 318.2 306.393 324.8 312.393 330C318.393 335.2 326.393 337.8 336.393 337.8C345.993 337.8 353.793 335 359.793 329.4C366.193 323.8 369.393 316.6 369.393 307.8C369.393 299.8 366.593 293.2 360.993 288C355.393 282.8 348.193 280.2 339.393 280.2H302.193V218.4H339.393C346.193 218.4 351.993 216 356.793 211.2C361.593 206.4 363.993 200.4 363.993 193.2C363.993 184.8 361.393 178.2 356.193 173.4C350.993 168.6 344.393 166.2 336.393 166.2C329.193 166.2 322.993 168.4 317.793 172.8C312.993 177.2 310.593 182.8 310.593 189.6H243.993C243.993 164.8 252.793 144.6 270.393 129C287.993 113 310.593 105 338.193 105C365.793 105 388.193 112.2 405.393 126.6C422.993 141 431.793 160 431.793 183.6C431.793 200.8 427.193 214.8 417.993 225.6C408.793 236 396.993 243.2 382.593 247.2C399.793 252 413.393 260.2 423.393 271.8C433.793 283.4 438.993 298 438.993 315.6C438.993 340.4 429.593 360.8 410.793 376.8C391.993 392.8 367.593 400.8 337.593 400.8Z" stroke="var(--stroke-color)" stroke-width="2.4" mask="url(#path-5-mask)"/>
-                            <path d="M129.529 167.6H104.329V105.2H197.329V400.2H129.529V167.6Z" stroke="var(--stroke-color)" stroke-width="2.4" mask="url(#path-5-mask)"/>
-                        </g>
-                    </svg>
-                    <div class="absolute inset-0 rounded-t-lg lg:rounded-t-none lg:rounded-r-lg shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d]"></div>
+                <div>
+                  <span class="font-label-md text-label-md text-on-surface-variant block">Hola,</span>
+                  <span
+                    class="font-headline-sm text-headline-sm text-primary dark:text-primary-fixed block leading-tight">Alejandro</span>
                 </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <button
+                  class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors Active: opacity-80 transition-opacity">
+                  <span class="material-symbols-outlined text-primary" data-icon="notifications">notifications</span>
+                </button>
+              </div>
+            </header>
+            <main class="pt-20 px-margin-mobile space-y-8">
+              <!-- Hero Section: Panic Button -->
+              <section class="flex flex-col items-center justify-center py-6">
+                <button
+                  class="emergency-glow relative w-[120px] h-[120px] bg-primary rounded-full flex items-center justify-center transition-all active:scale-90 z-10"
+                  id="panicButton">
+                  <span class="material-symbols-outlined text-white text-[56px]" data-icon="emergency_home"
+                    data-weight="fill" style="font-variation-settings: 'FILL' 1;">emergency_home</span>
+                </button>
+                <div class="mt-4 text-center">
+                  <h2 class="font-display-lg text-display-lg font-bold text-primary">BOTÓN DE PÁNICO</h2>
+                  <p class="font-body-md text-body-md text-secondary mt-1">Presiona si tuviste un accidente</p>
+                </div>
+              </section>
+              <!-- Section: Document Status (Horizontal Scroll) -->
+              <section>
+                <div class="flex justify-between items-center mb-4">
+                  <h3 class="font-headline-sm text-headline-sm">Estado de tus documentos</h3>
+                  <button class="text-primary font-label-lg text-label-lg">Ver todo</button>
+                </div>
+                <div class="flex gap-4 overflow-x-auto hide-scrollbar -mx-margin-mobile px-margin-mobile pb-4">
+                  <!-- SOAT -->
+                  <div
+                    class="min-w-[200px] bg-surface-container-lowest p-5 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.08)] border-l-4 border-[#27AE60]">
+                    <div class="flex justify-between items-start mb-3">
+                      <span class="material-symbols-outlined text-secondary" data-icon="description">description</span>
+                      <span
+                        class="bg-[#27AE60]/15 text-[#27AE60] text-[10px] font-bold px-2 py-1 rounded-full">VIGENTE</span>
+                    </div>
+                    <p class="font-label-lg text-label-lg text-on-surface">SOAT</p>
+                    <p class="font-body-sm text-body-sm text-on-surface-variant">Vence: 12 Nov 2024</p>
+                  </div>
+                  <!-- Tecnomecánica -->
+                  <div
+                    class="min-w-[200px] bg-surface-container-lowest p-5 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.08)] border-l-4 border-[#F5A623]">
+                    <div class="flex justify-between items-start mb-3">
+                      <span class="material-symbols-outlined text-secondary"
+                        data-icon="build_circle">build_circle</span>
+                      <span
+                        class="bg-[#F5A623]/15 text-[#F5A623] text-[10px] font-bold px-2 py-1 rounded-full uppercase">Vence
+                        pronto</span>
+                    </div>
+                    <p class="font-label-lg text-label-lg text-on-surface uppercase">Tecnomecánica</p>
+                    <p class="font-body-sm text-body-sm text-on-surface-variant">Vence: 15 Oct 2023</p>
+                  </div>
+                  <!-- Licencia -->
+                  <div
+                    class="min-w-[200px] bg-surface-container-lowest p-5 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.08)] border-l-4 border-[#27AE60]">
+                    <div class="flex justify-between items-start mb-3">
+                      <span class="material-symbols-outlined text-secondary" data-icon="badge">badge</span>
+                      <span
+                        class="bg-[#27AE60]/15 text-[#27AE60] text-[10px] font-bold px-2 py-1 rounded-full">VIGENTE</span>
+                    </div>
+                    <p class="font-label-lg text-label-lg text-on-surface">Licencia</p>
+                    <p class="font-body-sm text-body-sm text-on-surface-variant">Vence: 05 Ene 2028</p>
+                  </div>
+                </div>
+              </section>
+              <!-- Section: Mantenimiento (2x2 Grid) -->
+              <section>
+                <h3 class="font-headline-sm text-headline-sm mb-4">Mantenimiento</h3>
+                <div class="grid grid-cols-2 gap-4">
+                  <div
+                    class="bg-surface-container-low p-4 rounded-xl flex flex-col items-center justify-center h-[120px] text-center border border-outline-variant/30 transition-transform active:scale-95">
+                    <span class="material-symbols-outlined text-primary mb-2" data-icon="tire_repair">tire_repair</span>
+                    <span class="font-label-lg text-label-lg text-on-surface">Llantas</span>
+                    <span class="text-[10px] text-on-surface-variant">Revisar presión</span>
+                  </div>
+                  <div
+                    class="bg-surface-container-low p-4 rounded-xl flex flex-col items-center justify-center h-[120px] text-center border border-outline-variant/30 transition-transform active:scale-95">
+                    <span class="material-symbols-outlined text-primary mb-2"
+                      data-icon="battery_charging_full">battery_charging_full</span>
+                    <span class="font-label-lg text-label-lg text-on-surface">Batería</span>
+                    <span class="text-[10px] text-on-surface-variant">85% Salud</span>
+                  </div>
+                  <div
+                    class="bg-surface-container-low p-4 rounded-xl flex flex-col items-center justify-center h-[120px] text-center border border-outline-variant/30 transition-transform active:scale-95">
+                    <span class="material-symbols-outlined text-primary mb-2"
+                      data-icon="settings_suggest">settings_suggest</span>
+                    <span class="font-label-lg text-label-lg text-on-surface">Servicio</span>
+                    <span class="text-[10px] text-on-surface-variant">En 2.500 km</span>
+                  </div>
+                  <div
+                    class="bg-surface-container-low p-4 rounded-xl flex flex-col items-center justify-center h-[120px] text-center border border-outline-variant/30 transition-transform active:scale-95">
+                    <span class="material-symbols-outlined text-primary mb-2" data-icon="oil_barrel">oil_barrel</span>
+                    <span class="font-label-lg text-label-lg text-on-surface">Aceite</span>
+                    <span class="text-[10px] text-on-surface-variant">Nivel Óptimo</span>
+                  </div>
+                </div>
+              </section>
+              <!-- Section: Incidentes recientes -->
+              <section>
+                <h3 class="font-headline-sm text-headline-sm mb-4">Incidentes recientes</h3>
+                <div class="space-y-4">
+                  <div
+                    class="bg-surface-container-lowest p-4 rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.04)] flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-lg bg-error-container/20 flex items-center justify-center">
+                      <span class="material-symbols-outlined text-error" data-icon="car_crash">car_crash</span>
+                    </div>
+                    <div class="flex-1">
+                      <p class="font-label-lg text-label-lg text-on-surface">Choque simple - Calle 100</p>
+                      <p class="font-body-sm text-body-sm text-on-surface-variant">24 Ago 2023 • Finalizado</p>
+                    </div>
+                    <span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+                  </div>
+                  <div
+                    class="bg-surface-container-lowest p-4 rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.04)] flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-lg bg-surface-container-high flex items-center justify-center">
+                      <span class="material-symbols-outlined text-secondary" data-icon="minor_crash">minor_crash</span>
+                    </div>
+                    <div class="flex-1">
+                      <p class="font-label-lg text-label-lg text-on-surface">Rayón parqueadero</p>
+                      <p class="font-body-sm text-body-sm text-on-surface-variant">10 Jun 2023 • Reportado</p>
+                    </div>
+                    <span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+                  </div>
+                </div>
+              </section>
             </main>
+          </body>
+
+          </html>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ╔══════════════════════════════════════════╗ -->
+  <!-- ║  PROBLEMÁTICA                            ║ -->
+  <!-- ╚══════════════════════════════════════════╝ -->
+  <section class="section problema" id="problema">
+    <div class="container">
+      <div class="section-eyebrow fade-in">
+        <div class="eyebrow-line"></div>
+        <span>La problemática</span>
+      </div>
+      <h2
+        style="font:var(--display-lg);letter-spacing:-0.02em;color:var(--on-surface);max-width:600px;margin-bottom:12px;"
+        class="fade-in">
+        Un accidente desborda cualquier preparación previa
+      </h2>
+      <p style="font:var(--body-lg);color:var(--on-surface-variant);max-width:560px;" class="fade-in">
+        El impacto emocional de un choque activa respuestas de estrés agudo que bloquean la toma de decisiones
+        racionales. Las personas quedan paralizadas en el momento en que más necesitan actuar.
+      </p>
+
+      <div class="problema-grid stagger">
+        <div class="card problema-card fade-in" style="--i:0">
+          <div class="icon-wrap icon-wrap-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+          </div>
+          <h3 class="problema-card-title">El estrés anula la razón</h3>
+          <p class="problema-card-body">La adrenalina y el cortisol bloquean el pensamiento racional en segundos. Los
+            protocolos conocidos se evaporan y la persona entra en modo de supervivencia sin saber por dónde empezar.
+          </p>
+        </div>
+        <div class="card problema-card fade-in" style="--i:1">
+          <div class="icon-wrap icon-wrap-navy">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="16" y1="13" x2="8" y2="13" />
+              <line x1="16" y1="17" x2="8" y2="17" />
+              <polyline points="10 9 9 9 8 9" />
+            </svg>
+          </div>
+          <h3 class="problema-card-title">Desconocimiento del protocolo</h3>
+          <p class="problema-card-body">La mayoría de conductores no saben qué datos recolectar, en qué orden actuar ni
+            qué derechos tienen. Esto genera conflictos con la contraparte y retrasos con la aseguradora.</p>
+        </div>
+        <div class="card problema-card fade-in" style="--i:2">
+          <div class="icon-wrap icon-wrap-amber">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+              <circle cx="12" cy="13" r="4" />
+            </svg>
+          </div>
+          <h3 class="problema-card-title">Evidencia mal registrada</h3>
+          <p class="problema-card-body">Sin guía, se pierden fotografías críticas, se olvida registrar placas o testigos
+            y la escena se altera antes de ser documentada. Una oportunidad única e irrecuperable.</p>
+        </div>
+        <div class="card problema-card fade-in" style="--i:3">
+          <div class="icon-wrap icon-wrap-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+              <line x1="8" y1="21" x2="16" y2="21" />
+              <line x1="12" y1="17" x2="12" y2="21" />
+            </svg>
+          </div>
+          <h3 class="problema-card-title">Reportes incompletos</h3>
+          <p class="problema-card-body">Un reporte deficiente puede retrasar indemnizaciones, generar rechazos parciales
+            o poner en desventaja al asegurado. El proceso de reclamación exige precisión desde el primer momento.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ╔══════════════════════════════════════════╗ -->
+  <!-- ║  SOLUCIÓN / PASOS                        ║ -->
+  <!-- ╚══════════════════════════════════════════╝ -->
+  <section class="section solucion" id="solucion">
+    <div class="container">
+      <div class="solucion-inner">
+        <div>
+          <div class="section-eyebrow fade-in">
+            <div class="eyebrow-line"></div>
+            <span>La solución</span>
+          </div>
+          <h2 style="font:var(--display-lg);letter-spacing:-0.02em;color:var(--on-surface);margin-bottom:12px;"
+            class="fade-in">
+            Un botón. Una guía.<br>Toda la calma que necesitas.
+          </h2>
+          <p style="font:var(--body-md);color:var(--on-surface-variant);" class="fade-in">
+            Al presionar el botón de emergencia, ChocApp toma el control y te lleva paso a paso, eliminando la parálisis
+            en el momento más crítico.
+          </p>
+
+          <div class="pasos-list">
+            <div class="paso-item fade-in">
+              <div class="step-dot active">1</div>
+              <div class="paso-content">
+                <div class="paso-title">Activa el modo emergencia</div>
+                <div class="paso-desc">Un solo toque despliega la guía y registra timestamp y ubicación GPS del
+                  incidente.</div>
+              </div>
+            </div>
+            <div class="paso-item fade-in">
+              <div class="step-dot">2</div>
+              <div class="paso-content">
+                <div class="paso-title">Verifica tu seguridad</div>
+                <div class="paso-desc">El primer paso siempre es asegurar el bienestar físico de todos los involucrados.
+                </div>
+              </div>
+            </div>
+            <div class="paso-item fade-in">
+              <div class="step-dot">3</div>
+              <div class="paso-content">
+                <div class="paso-title">Registra datos del incidente</div>
+                <div class="paso-desc">La app te guía para capturar placas, datos del otro conductor, aseguradora y
+                  testigos.</div>
+              </div>
+            </div>
+            <div class="paso-item fade-in">
+              <div class="step-dot">4</div>
+              <div class="paso-content">
+                <div class="paso-title">Documenta con fotografías</div>
+                <div class="paso-desc">Instrucciones específicas sobre qué fotografiar y desde qué ángulos para
+                  evidencia sólida.</div>
+              </div>
+            </div>
+            <div class="paso-item fade-in">
+              <div class="step-dot">5</div>
+              <div class="paso-content">
+                <div class="paso-title">Genera el reporte PDF</div>
+                <div class="paso-desc">ChocApp ensambla automáticamente el documento completo listo para entregar.</div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        @if (Route::has('login'))
-            <div class="h-14.5 hidden lg:block"></div>
-        @endif
-    </body>
+        <!-- Panel visual -->
+        <div class="paso-panel fade-in">
+          <!DOCTYPE html>
+
+          <html lang="es">
+
+          <head>
+            <meta charset="utf-8" />
+            <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+            <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap"
+              rel="stylesheet" />
+            <link
+              href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+              rel="stylesheet" />
+            <link
+              href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+              rel="stylesheet" />
+            <script id="tailwind-config">
+              tailwind.config = {
+                darkMode: "class",
+                theme: {
+                  extend: {
+                    "colors": {
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-container": "#fffbff",
+                      "on-primary": "#ffffff",
+                      "surface-bright": "#f8f9fa",
+                      "on-tertiary-container": "#fffbff",
+                      "secondary-fixed": "#e2e0fc",
+                      "on-tertiary-fixed-variant": "#633f00",
+                      "surface-container": "#edeeef",
+                      "surface-tint": "#bf0811",
+                      "on-secondary-fixed-variant": "#45455b",
+                      "on-error": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "on-background": "#191c1d",
+                      "outline": "#916f6b",
+                      "primary": "#bb020f",
+                      "surface-container-low": "#f3f4f5",
+                      "outline-variant": "#e6bdb8",
+                      "secondary": "#5d5c74",
+                      "inverse-on-surface": "#f0f1f2",
+                      "on-secondary-fixed": "#1a1a2e",
+                      "inverse-primary": "#ffb4aa",
+                      "on-surface": "#191c1d",
+                      "tertiary": "#805200",
+                      "on-secondary": "#ffffff",
+                      "primary-container": "#e02a25",
+                      "error-container": "#ffdad6",
+                      "secondary-fixed-dim": "#c6c4df",
+                      "tertiary-fixed": "#ffddb4",
+                      "background": "#f8f9fa",
+                      "inverse-surface": "#2e3132",
+                      "surface-variant": "#e1e3e4",
+                      "on-surface-variant": "#5c403c",
+                      "surface-container-highest": "#e1e3e4",
+                      "surface-container-high": "#e7e8e9",
+                      "on-primary-fixed": "#410001",
+                      "on-tertiary-fixed": "#291800",
+                      "secondary-container": "#e2e0fc",
+                      "error": "#ba1a1a",
+                      "on-secondary-container": "#63627a",
+                      "tertiary-fixed-dim": "#ffb955",
+                      "surface-dim": "#d9dadb",
+                      "surface": "#f8f9fa",
+                      "tertiary-container": "#a16900",
+                      "on-primary-fixed-variant": "#930008",
+                      "primary-fixed": "#ffdad5",
+                      "primary-fixed-dim": "#ffb4aa",
+                      "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+                    },
+                    "spacing": {
+                      "margin-mobile": "20px",
+                      "container-padding": "16px",
+                      "unit": "4px",
+                      "tap-target-min": "56px",
+                      "gutter": "16px"
+                    },
+                    "fontFamily": {
+                      "headline-sm": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "label-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "label-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                      "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                      "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                      "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                      "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                      "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                      "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                      "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                      "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }]
+                    }
+                  },
+                },
+              }
+            </script>
+            <style>
+              .material-symbols-outlined {
+                font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+              }
+
+              .hotspot-ring {
+                animation: pulse-ring 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+              }
+
+              @keyframes pulse-ring {
+                0% {
+                  transform: scale(.8);
+                  opacity: 0.5;
+                }
+
+                50% {
+                  transform: scale(1.2);
+                  opacity: 0;
+                }
+
+                100% {
+                  transform: scale(.8);
+                  opacity: 0;
+                }
+              }
+
+              .car-bg-pattern {
+                background-color: #f8f9fa;
+                background-image: radial-gradient(#d1d5db 0.5px, transparent 0.5px);
+                background-size: 16px 16px;
+              }
+            </style>
+            <style>
+              body {
+                min-height: max(884px, 100dvh);
+              }
+            </style>
+          </head>
+
+          <body class="bg-surface font-body-md text-on-surface min-h-screen flex flex-col">
+            <!-- Top Navigation Bar -->
+            <header
+              class="flex justify-between items-center px-margin-mobile h-tap-target-min w-full z-50 bg-surface fixed top-0">
+              <div class="flex items-center gap-4">
+                <button aria-label="Volver"
+                  class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors">
+                  <span class="material-symbols-outlined text-on-surface">arrow_back</span>
+                </button>
+                <h1 class="font-headline-sm text-headline-sm text-on-surface">Registro de Choque</h1>
+              </div>
+              <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center">
+                <span class="material-symbols-outlined text-secondary">help</span>
+              </div>
+            </header>
+            <!-- Content Canvas -->
+            <main class="flex-grow pt-tap-target-min pb-32 px-margin-mobile max-w-md mx-auto w-full">
+              <!-- Step Indicator & Title -->
+              <section class="mt-8 mb-6">
+                <div class="flex justify-between items-end mb-2">
+                  <h2 class="font-display-lg text-display-lg text-primary">Fotografía tu vehículo</h2>
+                  <span class="font-label-lg text-label-lg text-secondary mb-1">Paso 2 de 4</span>
+                </div>
+                <p class="font-body-md text-body-md text-on-surface-variant">Captura los 8 ángulos obligatorios para el
+                  reporte oficial de la aseguradora.</p>
+              </section>
+              <!-- Progress Overview Card -->
+              <div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm mb-8 border border-outline-variant/30">
+                <div class="flex items-center justify-between mb-3">
+                  <span class="font-label-lg text-label-lg text-on-surface">3 de 8 ángulos fotografiados</span>
+                  <span class="font-label-md text-label-md text-primary font-bold">37%</span>
+                </div>
+                <div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+                  <div class="bg-primary h-full transition-all duration-500" style="width: 37.5%"></div>
+                </div>
+              </div>
+              <!-- Car Illustration with Hotspots -->
+              <div
+                class="relative aspect-[3/4] w-full car-bg-pattern rounded-3xl border border-outline-variant/50 overflow-hidden mb-8 flex items-center justify-center">
+                <!-- Main Car Illustration -->
+                <img alt="Vehículo diagrama superior"
+                  class="w-48 h-auto opacity-40 rotate-180 object-contain mix-blend-multiply"
+                  data-alt="A clean, minimalist top-down architectural technical illustration of a generic modern sedan car, isolated on a light gray background. The lighting is perfectly flat and clinical, consistent with a professional insurance claim application. The aesthetic is corporate modern with high-contrast sharp edges, using a neutral palette with slight red accents. The car is positioned vertically to allow for interactive hotspots around its perimeter."
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDztzaEScVAwdebL_rAXrt4-n_d305jmroRogzMMvvVXbcEkdz12EztdgiQzXwOBJc_7Lp495W6OOGQegl1Ist-l-S9-I-fvTnmylEm7VjSLz3rNUzucgEE-VHCsEEnx6THDdaq5hVbNwjgRvTrXi0CAXKcRFKGraQ_5wcaqMIRokAvnhlL9cuDjQB-9YaRG4l7_DrPkXHx_6hjcDK-vw0ar_VSIcHAJ5IqdXCB0lSKCqoTOJRCv_GiGWoxEpgkIDxCcNtpJcKRVHk" />
+                <!-- Hotspots Container -->
+                <div class="absolute inset-0 pointer-events-none">
+                  <!-- 1. Frente (Completed) -->
+                  <button
+                    class="absolute top-[10%] left-1/2 -translate-x-1/2 pointer-events-auto flex flex-col items-center group">
+                    <div
+                      class="w-10 h-10 bg-on-tertiary-fixed-variant/10 rounded-full border-2 border-on-tertiary-fixed-variant flex items-center justify-center shadow-md bg-white">
+                      <span class="material-symbols-outlined text-[#27AE60]"
+                        style="font-variation-settings: 'wght' 700">check</span>
+                    </div>
+                    <span
+                      class="mt-1 font-label-md text-label-md bg-white/90 px-2 py-0.5 rounded shadow-sm text-secondary">Frente</span>
+                  </button>
+                  <!-- 2. Frente 45 Izq (Pending) -->
+                  <button class="absolute top-[20%] left-[15%] pointer-events-auto flex flex-col items-center group">
+                    <div
+                      class="relative w-10 h-10 bg-white rounded-full border-2 border-outline flex items-center justify-center shadow-md hover:border-primary transition-colors">
+                      <div class="absolute inset-0 rounded-full border-2 border-primary/30 hotspot-ring"></div>
+                      <span class="material-symbols-outlined text-outline group-hover:text-primary">photo_camera</span>
+                    </div>
+                    <span
+                      class="mt-1 font-label-md text-label-md bg-white/90 px-2 py-0.5 rounded shadow-sm text-secondary">Frontal
+                      Izq</span>
+                  </button>
+                  <!-- 3. Frente 45 Der (Completed) -->
+                  <button class="absolute top-[20%] right-[15%] pointer-events-auto flex flex-col items-center group">
+                    <div
+                      class="w-10 h-10 bg-white rounded-full border-2 border-on-tertiary-fixed-variant flex items-center justify-center shadow-md">
+                      <span class="material-symbols-outlined text-[#27AE60]"
+                        style="font-variation-settings: 'wght' 700">check</span>
+                    </div>
+                    <span
+                      class="mt-1 font-label-md text-label-md bg-white/90 px-2 py-0.5 rounded shadow-sm text-secondary">Frontal
+                      Der</span>
+                  </button>
+                  <!-- 4. Lado Izquierdo (Pending) -->
+                  <button
+                    class="absolute top-1/2 left-[5%] -translate-y-1/2 pointer-events-auto flex flex-col items-center group">
+                    <div
+                      class="w-10 h-10 bg-white rounded-full border-2 border-outline flex items-center justify-center shadow-md hover:border-primary transition-colors">
+                      <span class="material-symbols-outlined text-outline group-hover:text-primary">photo_camera</span>
+                    </div>
+                    <span
+                      class="mt-1 font-label-md text-label-md bg-white/90 px-2 py-0.5 rounded shadow-sm text-secondary">Lado
+                      Izq</span>
+                  </button>
+                  <!-- 5. Lado Derecho (Pending) -->
+                  <button
+                    class="absolute top-1/2 right-[5%] -translate-y-1/2 pointer-events-auto flex flex-col items-center group">
+                    <div
+                      class="w-10 h-10 bg-white rounded-full border-2 border-outline flex items-center justify-center shadow-md hover:border-primary transition-colors">
+                      <span class="material-symbols-outlined text-outline group-hover:text-primary">photo_camera</span>
+                    </div>
+                    <span
+                      class="mt-1 font-label-md text-label-md bg-white/90 px-2 py-0.5 rounded shadow-sm text-secondary">Lado
+                      Der</span>
+                  </button>
+                  <!-- 6. Trasero 45 Izq (Pending) -->
+                  <button class="absolute bottom-[20%] left-[15%] pointer-events-auto flex flex-col items-center group">
+                    <div
+                      class="w-10 h-10 bg-white rounded-full border-2 border-outline flex items-center justify-center shadow-md hover:border-primary transition-colors">
+                      <span class="material-symbols-outlined text-outline group-hover:text-primary">photo_camera</span>
+                    </div>
+                    <span
+                      class="mt-1 font-label-md text-label-md bg-white/90 px-2 py-0.5 rounded shadow-sm text-secondary">Trasero
+                      Izq</span>
+                  </button>
+                  <!-- 7. Trasero 45 Der (Pending) -->
+                  <button
+                    class="absolute bottom-[20%] right-[15%] pointer-events-auto flex flex-col items-center group">
+                    <div
+                      class="w-10 h-10 bg-white rounded-full border-2 border-outline flex items-center justify-center shadow-md hover:border-primary transition-colors">
+                      <span class="material-symbols-outlined text-outline group-hover:text-primary">photo_camera</span>
+                    </div>
+                    <span
+                      class="mt-1 font-label-md text-label-md bg-white/90 px-2 py-0.5 rounded shadow-sm text-secondary">Trasero
+                      Der</span>
+                  </button>
+                  <!-- 8. Trasero (Completed) -->
+                  <button
+                    class="absolute bottom-[10%] left-1/2 -translate-x-1/2 pointer-events-auto flex flex-col items-center group">
+                    <div
+                      class="w-10 h-10 bg-white rounded-full border-2 border-on-tertiary-fixed-variant flex items-center justify-center shadow-md">
+                      <span class="material-symbols-outlined text-[#27AE60]"
+                        style="font-variation-settings: 'wght' 700">check</span>
+                    </div>
+                    <span
+                      class="mt-1 font-label-md text-label-md bg-white/90 px-2 py-0.5 rounded shadow-sm text-secondary">Trasero</span>
+                  </button>
+                </div>
+              </div>
+              <!-- Instructions Section -->
+              <section class="space-y-4">
+                <h3 class="font-headline-sm text-headline-sm text-on-surface">Instrucciones de cumplimiento</h3>
+                <div class="grid grid-cols-1 gap-3">
+                  <div class="flex gap-4 p-4 bg-surface-container-low rounded-xl border border-outline-variant/20">
+                    <span class="material-symbols-outlined text-primary">lightbulb</span>
+                    <div class="flex-1">
+                      <p class="font-label-lg text-label-lg text-on-surface">Iluminación Adecuada</p>
+                      <p class="font-body-sm text-body-sm text-on-surface-variant">Asegúrate de que la placa sea visible
+                        y no haya sombras fuertes cubriendo el daño.</p>
+                    </div>
+                  </div>
+                  <div class="flex gap-4 p-4 bg-surface-container-low rounded-xl border border-outline-variant/20">
+                    <span class="material-symbols-outlined text-primary">distance</span>
+                    <div class="flex-1">
+                      <p class="font-label-lg text-label-lg text-on-surface">Distancia Recomendada</p>
+                      <p class="font-body-sm text-body-sm text-on-surface-variant">Mantente a 2-3 metros del vehículo
+                        para capturar el contexto del entorno.</p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </main>
+          </body>
+
+          </html>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ╔══════════════════════════════════════════╗ -->
+  <!-- ║  BENEFICIOS                              ║ -->
+  <!-- ╚══════════════════════════════════════════╝ -->
+  <section class="section beneficios" id="beneficios">
+    <div class="container">
+      <div class="section-eyebrow fade-in">
+        <div class="eyebrow-line"></div>
+        <span>Beneficios clave</span>
+      </div>
+      <h2
+        style="font:var(--display-lg);letter-spacing:-0.02em;color:var(--on-surface);max-width:560px;margin-bottom:12px;"
+        class="fade-in">
+        Por qué ChocApp cambia la experiencia de un accidente
+      </h2>
+      <p style="font:var(--body-lg);color:var(--on-surface-variant);max-width:520px;" class="fade-in">
+        Más allá de ser una guía, ChocApp es una herramienta de empoderamiento que convierte el caos en un proceso
+        ordenado.
+      </p>
+
+      <div class="beneficios-grid stagger">
+        <div class="card beneficio-card fade-in" style="--i:0">
+          <div class="icon-wrap icon-wrap-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg>
+          </div>
+          <h3 class="beneficio-title">Respuesta inmediata</h3>
+          <p class="beneficio-body">Sin esperar llamadas ni buscar instrucciones. La guía se activa en segundos desde el
+            momento del impacto.</p>
+        </div>
+        <div class="card beneficio-card fade-in" style="--i:1">
+          <div class="icon-wrap icon-wrap-navy">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+          </div>
+          <h3 class="beneficio-title">Claridad en el caos</h3>
+          <p class="beneficio-body">El flujo paso a paso elimina la parálisis por decisión. Sabes exactamente qué hacer
+            a continuación.</p>
+        </div>
+        <div class="card beneficio-card fade-in" style="--i:2">
+          <div class="icon-wrap icon-wrap-amber">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
+              <path d="M22 12A10 10 0 0 0 12 2v10z" />
+            </svg>
+          </div>
+          <h3 class="beneficio-title">Evidencia completa</h3>
+          <p class="beneficio-body">Ningún dato crítico se omite: fotos, placas, testigos y condiciones quedan
+            registrados con precisión.</p>
+        </div>
+        <div class="card beneficio-card fade-in" style="--i:3">
+          <div class="icon-wrap icon-wrap-success">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+          </div>
+          <h3 class="beneficio-title">Proceso ágil de reclamación</h3>
+          <p class="beneficio-body">El reporte cumple los requisitos estándar de las aseguradoras colombianas,
+            reduciendo tiempos y rechazos.</p>
+        </div>
+        <div class="card beneficio-card fade-in" style="--i:4">
+          <div class="icon-wrap icon-wrap-navy">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="16" y1="13" x2="8" y2="13" />
+              <line x1="16" y1="17" x2="8" y2="17" />
+              <polyline points="10 9 9 9 8 9" />
+            </svg>
+          </div>
+          <h3 class="beneficio-title">Protección legal</h3>
+          <p class="beneficio-body">La documentación correcta desde el inicio protege al usuario ante disputas legales o
+            diferencias con la contraparte.</p>
+        </div>
+        <div class="card beneficio-card fade-in" style="--i:5">
+          <div class="icon-wrap icon-wrap-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+          </div>
+          <h3 class="beneficio-title">Accesible para todos</h3>
+          <p class="beneficio-body">Interfaz diseñada para operar bajo estrés. Botones de 56px, jerarquía clara, sin
+            conocimiento técnico requerido.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ╔══════════════════════════════════════════╗ -->
+  <!-- ║  PÚBLICO OBJETIVO                        ║ -->
+  <!-- ╚══════════════════════════════════════════╝ -->
+  <section class="section publico">
+    <div class="container">
+      <div class="section-eyebrow fade-in">
+        <div class="eyebrow-line"></div>
+        <span>Público objetivo</span>
+      </div>
+      <h2 class="publico-title fade-in">¿Para quién es ChocApp?</h2>
+      <p class="publico-subtitle fade-in">Conductores activos en Colombia que necesitan seguridad, claridad y respaldo
+        documental en el peor momento.</p>
+
+      <div class="publico-grid stagger">
+        <div class="publico-card fade-in" style="--i:0">
+          <div class="icon-wrap"
+            style="background:rgba(232,48,42,0.15);color:var(--inverse-primary);width:44px;height:44px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </div>
+          <h3 class="publico-card-title">Conductor particular</h3>
+          <p class="publico-card-body">Vehículo propio asegurado. Necesita proteger sus derechos frente a la aseguradora
+            y la contraparte sin conocer el protocolo oficial.</p>
+        </div>
+        <div class="publico-card fade-in" style="--i:1">
+          <div class="icon-wrap"
+            style="background:rgba(232,48,42,0.15);color:var(--inverse-primary);width:44px;height:44px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="3" width="15" height="13" />
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+              <circle cx="5.5" cy="18.5" r="2.5" />
+              <circle cx="18.5" cy="18.5" r="2.5" />
+            </svg>
+          </div>
+          <h3 class="publico-card-title">Conductor de uso profesional</h3>
+          <p class="publico-card-body">Representantes comerciales, mensajeros o trabajadores para quienes el vehículo es
+            herramienta de trabajo y necesitan soluciones rápidas.</p>
+        </div>
+        <div class="publico-card fade-in" style="--i:2">
+          <div class="icon-wrap"
+            style="background:rgba(232,48,42,0.15);color:var(--inverse-primary);width:44px;height:44px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+          </div>
+          <h3 class="publico-card-title">Sin experiencia en seguros</h3>
+          <p class="publico-card-body">Personas que enfrentan su primer accidente sin saber por dónde comenzar ni qué
+            información es legalmente relevante para la reclamación.</p>
+        </div>
+        <div class="publico-card fade-in" style="--i:3">
+          <div class="icon-wrap"
+            style="background:rgba(232,48,42,0.15);color:var(--inverse-primary);width:44px;height:44px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+              <line x1="12" y1="18" x2="12.01" y2="18" />
+            </svg>
+          </div>
+          <h3 class="publico-card-title">Usuario Android +18</h3>
+          <p class="publico-card-body">Cualquier conductor mayor de edad con smartphone Android. La interfaz opera bajo
+            estrés sin requerir conocimientos técnicos previos.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ╔══════════════════════════════════════════╗ -->
+  <!-- ║  REPORTE                                 ║ -->
+  <!-- ╚══════════════════════════════════════════╝ -->
+  <section class="section reporte" id="reporte">
+    <div class="container">
+      <div class="reporte-inner">
+        <div>
+          <div class="section-eyebrow fade-in">
+            <div class="eyebrow-line"></div>
+            <span>El reporte inteligente</span>
+          </div>
+          <h2 style="font:var(--display-lg);letter-spacing:-0.02em;color:var(--on-surface);margin-bottom:12px;"
+            class="fade-in">
+            De accidente a documento en minutos
+          </h2>
+          <p style="font:var(--body-md);color:var(--on-surface-variant);" class="fade-in">
+            ChocApp recopila todo durante el flujo guiado y genera automáticamente un reporte profesional listo para la
+            aseguradora, sin que el conductor deba recordar nada después.
+          </p>
+
+          <div class="feature-list stagger">
+            <div class="feature-row fade-in" style="--i:0">
+              <div class="feature-check">✓</div>
+              <p class="feature-text"><strong>Formulario estructurado</strong> con todos los campos requeridos por
+                aseguradoras colombianas.</p>
+            </div>
+            <div class="feature-row fade-in" style="--i:1">
+              <div class="feature-check">✓</div>
+              <p class="feature-text"><strong>Evidencia fotográfica</strong> organizada con metadatos de hora y
+                ubicación GPS.</p>
+            </div>
+            <div class="feature-row fade-in" style="--i:2">
+              <div class="feature-check">✓</div>
+              <p class="feature-text"><strong>Datos de partes involucradas:</strong> conductor, vehículo, placa,
+                aseguradora y testigos.</p>
+            </div>
+            <div class="feature-row fade-in" style="--i:3">
+              <div class="feature-check">✓</div>
+              <p class="feature-text"><strong>Exportación en PDF</strong> lista para compartir por correo, WhatsApp o
+                presencialmente.</p>
+            </div>
+            <div class="feature-row fade-in" style="--i:4">
+              <div class="feature-check">✓</div>
+              <p class="feature-text"><strong>Almacenamiento offline</strong> del reporte para consulta sin necesidad de
+                internet.</p>
+            </div>
+            <div class="feature-row fade-in" style="--i:5">
+              <div class="feature-check">✓</div>
+              <p class="feature-text"><strong>Sincronización en nube</strong> (Firebase) para respaldo seguro cuando hay
+                conexión disponible.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- PDF Mockup -->
+        <div class="fade-in">
+          <!DOCTYPE html>
+
+          <html class="light" lang="es">
+
+          <head>
+            <meta charset="utf-8" />
+            <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+            <title>Detalle de Accidente - ChocApp</title>
+            <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap"
+              rel="stylesheet" />
+            <link
+              href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+              rel="stylesheet" />
+            <link
+              href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+              rel="stylesheet" />
+            <script id="tailwind-config">
+              tailwind.config = {
+                darkMode: "class",
+                theme: {
+                  extend: {
+                    "colors": {
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-container": "#fffbff",
+                      "on-primary": "#ffffff",
+                      "surface-bright": "#f8f9fa",
+                      "on-tertiary-container": "#fffbff",
+                      "secondary-fixed": "#e2e0fc",
+                      "on-tertiary-fixed-variant": "#633f00",
+                      "surface-container": "#edeeef",
+                      "surface-tint": "#bf0811",
+                      "on-secondary-fixed-variant": "#45455b",
+                      "on-error": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "on-background": "#191c1d",
+                      "outline": "#916f6b",
+                      "primary": "#bb020f",
+                      "surface-container-low": "#f3f4f5",
+                      "outline-variant": "#e6bdb8",
+                      "secondary": "#5d5c74",
+                      "inverse-on-surface": "#f0f1f2",
+                      "on-secondary-fixed": "#1a1a2e",
+                      "inverse-primary": "#ffb4aa",
+                      "on-surface": "#191c1d",
+                      "tertiary": "#805200",
+                      "on-secondary": "#ffffff",
+                      "primary-container": "#e02a25",
+                      "error-container": "#ffdad6",
+                      "secondary-fixed-dim": "#c6c4df",
+                      "tertiary-fixed": "#ffddb4",
+                      "background": "#f8f9fa",
+                      "inverse-surface": "#2e3132",
+                      "surface-variant": "#e1e3e4",
+                      "on-surface-variant": "#5c403c",
+                      "surface-container-highest": "#e1e3e4",
+                      "surface-container-high": "#e7e8e9",
+                      "on-primary-fixed": "#410001",
+                      "on-tertiary-fixed": "#291800",
+                      "secondary-container": "#e2e0fc",
+                      "error": "#ba1a1a",
+                      "on-secondary-container": "#63627a",
+                      "tertiary-fixed-dim": "#ffb955",
+                      "surface-dim": "#d9dadb",
+                      "surface": "#f8f9fa",
+                      "tertiary-container": "#a16900",
+                      "on-primary-fixed-variant": "#930008",
+                      "primary-fixed": "#ffdad5",
+                      "primary-fixed-dim": "#ffb4aa",
+                      "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+                    },
+                    "spacing": {
+                      "margin-mobile": "20px",
+                      "container-padding": "16px",
+                      "unit": "4px",
+                      "tap-target-min": "56px",
+                      "gutter": "16px"
+                    },
+                    "fontFamily": {
+                      "headline-sm": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "label-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "label-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                      "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                      "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                      "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                      "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                      "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                      "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                      "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                      "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }]
+                    }
+                  },
+                },
+              }
+            </script>
+            <style>
+              .material-symbols-outlined {
+                font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+              }
+
+              .hide-scrollbar::-webkit-scrollbar {
+                display: none;
+              }
+
+              .hide-scrollbar {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+              }
+            </style>
+            <style>
+              body {
+                min-height: max(884px, 100dvh);
+              }
+            </style>
+          </head>
+
+          <body class="bg-surface text-on-surface font-body-md selection:bg-primary-fixed">
+            <!-- Top Navigation -->
+            <header
+              class="flex justify-between items-center px-margin-mobile h-tap-target-min w-full z-50 bg-surface dark:bg-surface sticky top-0">
+              <div class="flex items-center gap-3">
+                <button aria-label="Volver"
+                  class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors text-primary">
+                  <span class="material-symbols-outlined">arrow_back</span>
+                </button>
+                <h1 class="font-headline-sm text-headline-sm text-primary">Accidente</h1>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary" data-icon="notifications">notifications</span>
+                <div
+                  class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden border border-outline-variant">
+                  <img alt="User Profile" class="w-full h-full object-cover"
+                    data-alt="A high-quality professional studio portrait of a man in his 30s with a confident expression, set against a clean minimalist light gray background. The lighting is soft and directional, emphasizing natural skin textures and a clean-shaven look. He is wearing a simple dark navy blue polo shirt. The overall image style is polished, corporate, and trustworthy, perfectly aligning with a modern insurance application's professional aesthetic."
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLFzldGgxvwX9GTJie9Wdxo13o04zkcRYzPpBLqm-zkQbs_tPp15dGGirnI4X5PctFl4zNTgqZTdMyVFo1FVKAm62iQvPpC81Dw_-xhtsEwCRgMHul0m4reiH5iTOD2YhaIDK9PWbK7gPJcNhcUUmf-w5hxKJ7wsUHCvkgp4CRyZqX6vDp_pQzRL1qjX0xDd40KG6N48WPmYXRAo-Ou2G2vtFm6UkdX5ftTi4M-fubTkL5QmWRSyaGyDYGLphuuKweOZCeDgxsteY" />
+                </div>
+              </div>
+            </header>
+            <main class="pb-32">
+              <!-- Hero Information Section -->
+              <section class="px-margin-mobile pt-6 pb-4">
+                <div class="flex flex-col gap-2">
+                  <span
+                    class="inline-flex items-center self-start px-3 py-1 rounded-full bg-[#27AE60]/15 text-[#27AE60] font-label-md text-label-md uppercase tracking-wider">
+                    Enviado a Aseguradora
+                  </span>
+                  <h2 class="font-headline-md text-headline-md text-on-surface">12 Oct 2023 - Calle 100, Bogotá</h2>
+                  <p class="font-body-md text-on-surface-variant flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[18px]">location_on</span>
+                    Localidad de Usaquén, Bogotá D.C.
+                  </p>
+                </div>
+              </section>
+              <!-- Bento Grid: Fast Actions & Info -->
+              <section class="px-margin-mobile grid grid-cols-2 gap-4 mb-8">
+                <div
+                  class="col-span-2 bg-surface-container-lowest p-5 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.06)] border border-surface-variant/50">
+                  <div class="flex justify-between items-start mb-4">
+                    <div>
+                      <p class="font-label-md text-label-md text-on-surface-variant uppercase">Vehículo involucrado</p>
+                      <p class="font-headline-sm text-headline-sm">Toyota Corolla</p>
+                      <p class="font-body-sm text-on-surface-variant">Placa: XYZ-789</p>
+                    </div>
+                    <span class="material-symbols-outlined text-primary text-4xl">directions_car</span>
+                  </div>
+                  <div class="flex gap-2">
+                    <span
+                      class="px-2 py-1 rounded bg-surface-container-high font-label-md text-label-md text-on-surface">Gris
+                      Metálico</span>
+                    <span
+                      class="px-2 py-1 rounded bg-surface-container-high font-label-md text-label-md text-on-surface">Modelo
+                      2022</span>
+                  </div>
+                </div>
+              </section>
+              <!-- Horizontal Photo Gallery -->
+              <section class="mb-8">
+                <div class="px-margin-mobile mb-4 flex justify-between items-center">
+                  <h3 class="font-headline-sm text-headline-sm">Evidencia Fotográfica</h3>
+                  <span class="font-label-lg text-label-lg text-primary">Ver todas</span>
+                </div>
+                <!-- Category: Ángulos -->
+                <div class="mb-6">
+                  <p
+                    class="px-margin-mobile font-label-md text-label-md text-on-surface-variant uppercase mb-3 px-margin-mobile">
+                    Ángulos Generales</p>
+                  <div class="flex overflow-x-auto gap-3 px-margin-mobile hide-scrollbar">
+                    <div class="flex-none w-48 h-32 rounded-xl overflow-hidden shadow-sm relative group">
+                      <img class="w-full h-full object-cover"
+                        data-alt="A dramatic wide-angle photograph of a silver sedan with front bumper damage on a modern city street in Bogotá during daylight. The lighting is slightly overcast, casting soft shadows. The shot focuses on the car's orientation relative to the street lane. The background features clean urban architecture and blurred traffic signs, maintaining a professional documentary aesthetic with neutral tones and sharp details."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAv7OMSW_laVB3lPaKg8adOQeKbs-g6Ct016Hu4arsPTA2KpX8OOjlGNMZUp-rIRQbpPf1MCXPq1iSDaLRtNmA_dCbX2tLG2-Vi0BRHDhYF56IMTbDBSRjfAmub8jge8GWbP9Hq1V5nq365RSr6qTS0eaiCPCrgBpB4Rhxp-FJlY5dujuc24eVH6YmwDuAYePIZ0Yj40ZgvEIch0NjDxYxvtL188uR9oTpjrGC9iUeK3NoMhtQSdOC-4QnysW1uhBEd7ktu4WuwIvk" />
+                      <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2">
+                        <p class="text-white font-label-md text-[10px]">Frontal Derecho</p>
+                      </div>
+                    </div>
+                    <div class="flex-none w-48 h-32 rounded-xl overflow-hidden shadow-sm relative">
+                      <img class="w-full h-full object-cover"
+                        data-alt="A medium shot showing the rear side view of a silver Toyota Corolla on an urban asphalt road. The image captures the vehicle's position against the curb. The lighting is crisp afternoon sun, highlighting the metallic finish of the car. The composition is clean and technical, emphasizing the car's placement in the accident scene for insurance documentation purposes."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9nGPa54ukE1Pe7ExMAmuwGSY2aECMUoNfOSY6JrbBPk11tiGLm-9g9SVroQ2ODyz1CKgEy0zOy1P4C2Q77bsAW74g01pCt_52y8B2QW8z6Ukzhx1X8cSalDOcC9crveo9VoyX9SZ9-O0ecaJhAynEyr_fbBjBT6y5OZ8-_WMt3uSdL_sLNvHzAl8LnI8F15LgNrCdyV6UkWSGF6ZzJKZ9ppSxC7antOkVgWfmC3A6abe91OcC-F_C4-ZpPpx_3NZmJApUA_OktTA" />
+                      <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2">
+                        <p class="text-white font-label-md text-[10px]">Posterior Izquierdo</p>
+                      </div>
+                    </div>
+                    <div
+                      class="flex-none w-48 h-32 rounded-xl bg-surface-container flex flex-col items-center justify-center border-2 border-dashed border-outline-variant text-on-surface-variant">
+                      <span class="material-symbols-outlined">add_a_photo</span>
+                      <span class="font-label-md text-[10px] mt-1">Añadir</span>
+                    </div>
+                  </div>
+                </div>
+                <!-- Category: Terceros -->
+                <div>
+                  <p class="px-margin-mobile font-label-md text-label-md text-on-surface-variant uppercase mb-3">
+                    Vehículos de Terceros</p>
+                  <div class="flex overflow-x-auto gap-3 px-margin-mobile hide-scrollbar">
+                    <div class="flex-none w-48 h-32 rounded-xl overflow-hidden shadow-sm relative">
+                      <img class="w-full h-full object-cover"
+                        data-alt="Technical close-up photograph of a black SUV's license plate and rear light assembly involved in a minor collision. The image is taken at eye-level with clear visibility of the plate numbers. The setting is a clean, modern city street with bright daytime lighting. The focus is sharp on the vehicle details, emphasizing clarity for legal and insurance identification in a minimalist corporate style."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuABZg636uapXRi6txx0JB4VABYB7R4dWxuGVAgHHsUfCggzJjK3ArkiPvs8M-pq7cmVtthMEFfvDgWTNlDnHYfsaO7iPGN7BQfCoxrwzvVJ5AIlS0rGb5gpuH_jGHgiztuwsBvjIC5Yk9uAmtO-OPuGpn4Ptau7YioDDJi2n47SSUiGcpZQnWdq3btVk3G7XKddtZx8rc0-q0QQYvHIQ4LvUifXcKpNVJHshLvC2pKvWMzDM1OjB8UWnp_ftC07za4XcDa0u2nwfEQ" />
+                      <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2">
+                        <p class="text-white font-label-md text-[10px]">Placa Tercero</p>
+                      </div>
+                    </div>
+                    <div class="flex-none w-48 h-32 rounded-xl overflow-hidden shadow-sm relative">
+                      <img class="w-full h-full object-cover"
+                        data-alt="Insurance evidence photo capturing the side impact damage on a white hatchback vehicle. The shot is well-lit and clearly shows scratches and a dent on the passenger door. The environment is a gray asphalt road. The photographic style is clinical and objective, avoiding artistic filters to ensure the most accurate representation of the vehicle's condition for claim processing."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFl65nM_6DslR9tR0X2eLyAHHRMqq9ZtBd60VMVx3qvjAyexSfAnGEA82UrUGwqj3XCVjnacSW5aH8NMpYoGmflb2TTF3XYxgeQZIlRELNC7PLXnyGtyZChy_eCJsjqeGkWkWvlVTJftvtV9Qz2_M78BaEI3eqS6OBnEFsD4c4dnWaUldxV9M73na3hyBosYyuH09JPjwNqQDCP0JMTgYRqZcVqGUvQ7P099dQRMnFeHyBarW_dcWPOUnOykUQaG9T7lx7PCh0eoQ" />
+                      <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2">
+                        <p class="text-white font-label-md text-[10px]">Lateral Tercero</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <!-- Timeline Section -->
+              <section class="px-margin-mobile mb-8">
+                <h3 class="font-headline-sm text-headline-sm mb-6">Estado del Trámite</h3>
+                <div
+                  class="relative pl-8 space-y-8 before:content-[''] before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[2px] before:bg-surface-container-highest">
+                  <!-- Step 3 (Active) -->
+                  <div class="relative">
+                    <div
+                      class="absolute -left-[30px] w-6 h-6 rounded-full bg-primary border-4 border-surface flex items-center justify-center z-10">
+                      <span class="material-symbols-outlined text-white text-[12px]"
+                        style="font-variation-settings: 'FILL' 1;">check</span>
+                    </div>
+                    <div>
+                      <p class="font-label-lg text-label-lg text-primary">Notificado</p>
+                      <p class="font-body-sm text-on-surface-variant">12 Oct 2023 - 10:45 AM</p>
+                      <p class="font-body-md mt-1">La aseguradora ha recibido la evidencia y ha iniciado el caso
+                        #ACC-9041.</p>
+                    </div>
+                  </div>
+                  <!-- Step 2 -->
+                  <div class="relative">
+                    <div
+                      class="absolute -left-[30px] w-6 h-6 rounded-full bg-surface-container-highest border-4 border-surface flex items-center justify-center z-10">
+                      <span class="material-symbols-outlined text-on-surface-variant text-[12px]"
+                        style="font-variation-settings: 'FILL' 1;">check</span>
+                    </div>
+                    <div>
+                      <p class="font-label-lg text-label-lg text-on-surface">Fotos cargadas</p>
+                      <p class="font-body-sm text-on-surface-variant">12 Oct 2023 - 10:30 AM</p>
+                    </div>
+                  </div>
+                  <!-- Step 1 -->
+                  <div class="relative">
+                    <div
+                      class="absolute -left-[30px] w-6 h-6 rounded-full bg-surface-container-highest border-4 border-surface flex items-center justify-center z-10">
+                      <span class="material-symbols-outlined text-on-surface-variant text-[12px]"
+                        style="font-variation-settings: 'FILL' 1;">check</span>
+                    </div>
+                    <div>
+                      <p class="font-label-lg text-label-lg text-on-surface">Reportado</p>
+                      <p class="font-body-sm text-on-surface-variant">12 Oct 2023 - 10:15 AM</p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <!-- CTA Action Buttons -->
+              <section class="px-margin-mobile flex flex-col gap-4">
+                <button
+                  class="w-full h-tap-target-min bg-primary text-on-primary rounded-xl font-label-lg text-label-lg flex items-center justify-center gap-2 shadow-lg shadow-primary/20 active:scale-95 transition-transform">
+                  <span class="material-symbols-outlined">description</span>
+                  Generar reporte
+                </button>
+                <div class="grid grid-cols-2 gap-4">
+                  <button
+                    class="h-tap-target-min border border-outline text-on-surface rounded-xl font-label-lg text-label-lg flex items-center justify-center gap-2 hover:bg-surface-container-low transition-colors">
+                    <span class="material-symbols-outlined">share</span>
+                    Compartir
+                  </button>
+                  <button
+                    class="h-tap-target-min bg-secondary text-on-secondary rounded-xl font-label-lg text-label-lg flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+                    <span class="material-symbols-outlined">support_agent</span>
+                    Contactar
+                  </button>
+                </div>
+              </section>
+            </main>
+          </body>
+
+          </html>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ╔══════════════════════════════════════════╗ -->
+  <!-- ║  CTA                                     ║ -->
+  <!-- ╚══════════════════════════════════════════╝ -->
+  <section class="cta-section" id="cta">
+    <div class="container" style="position:relative;z-index:1;">
+      <div class="badge badge-primary" style="margin-bottom:20px;display:inline-flex;">Disponible para Android</div>
+      <h2 class="cta-title fade-in">Instala ChocApp.<br>Espera no tener que usarla.</h2>
+      <p class="cta-body fade-in">La tranquilidad de saber qué hacer en una emergencia vale más que cualquier
+        preparación teórica.</p>
+      <div class="cta-actions fade-in">
+        <a href="#" class="btn btn-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M3.18 23.76c.28.15.6.2.91.14l12.82-11.9-3.01-3.01-10.72 14.77zM20.65 9.6L17.4 7.74l-3.39 3.15 3.39 3.14 3.27-1.88c.93-.54.93-2.01-.02-2.55zM.35.37A1.03 1.03 0 000 1.16v21.68c0 .32.13.61.35.79l.11.08L12.38 12 .46.29.35.37zM13.05 12l3.01-3.01-12.82-11.9c-.31-.06-.63-.01-.91.14L13.05 12z" />
+          </svg>
+          Descargar en Google Play
+        </a>
+        <a href="#problema" class="btn btn-outline">Ver la problemática</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ╔══════════════════════════════════════════╗ -->
+  <!-- ║  FOOTER                                  ║ -->
+  <!-- ╚══════════════════════════════════════════╝ -->
+  <footer>
+    <div class="footer-logo">
+      <div class="footer-logo-dot"></div>
+      ChocApp
+    </div>
+    <div class="footer-text">Solución de emergencia vial · Android · Colombia · 2026</div>
+  </footer>
+
+  <script>
+    // Intersection Observer para fade-in
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.fade-in').forEach((el, i) => {
+      // Aplica stagger si el padre tiene clase stagger
+      if (el.parentElement && el.parentElement.classList.contains('stagger')) {
+        el.style.transitionDelay = `${(parseInt(el.style.getPropertyValue('--i') || 0)) * 80}ms`;
+      }
+      observer.observe(el);
+    });
+
+    // Activar elementos ya visibles al cargar
+    document.querySelectorAll('.fade-in').forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight) el.classList.add('visible');
+    });
+  </script>
+
+</body>
+
 </html>
